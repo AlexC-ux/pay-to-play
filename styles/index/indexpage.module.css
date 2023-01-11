@@ -8,6 +8,7 @@
     z-index: 1;
     transition: 400ms;
     height: calc(20vw);
+    width: auto;
 }
 *:has(.heigerOnHover1){
     min-height: calc(20vw + 20px);

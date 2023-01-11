@@ -36,11 +36,8 @@ export default function Home() {
           mx: "auto",
           mt: 5,
           mb: -10,
-          img: {
-            maxWidth: ""
-          }
         }}>
-          <Image src="/steam/steam_v1.png" className={styles.heigerOnHover1} alt="steam image"/>
+          <Image src="/steam/steam_v1.png" className={styles.heigerOnHover1} alt="steam image" width={600} height={300}/>
         </Box>
         <Box
           sx={{
