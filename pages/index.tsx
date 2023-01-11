@@ -27,20 +27,20 @@ export default function Home() {
 
         <Typography align='center'
           variant='h3'
-          children={intl.formatMessage({ id: "INDEX.title.1" })}
           sx={{
             my: 2,
-          }} />
+          }}>{intl.formatMessage({ id: "INDEX.title.1" })}</Typography>
+
         <Box sx={{
           width: "100%",
           mx: "auto",
           mt: 5,
-          mb:-10,
-          img:{
-            maxWidth:""
+          mb: -10,
+          img: {
+            maxWidth: ""
           }
         }}>
-          <img src="/steam/steam_v1.png" className={styles.heigerOnHover1}/>
+          <img src="/steam/steam_v1.png" className={styles.heigerOnHover1} />
         </Box>
         <Box
           sx={{
@@ -50,12 +50,11 @@ export default function Home() {
           <Typography
             align='center'
             variant='h3'
-            children={intl.formatMessage({ id: "INDEX.title.2" })}
             sx={{
-              color:globalContext?.theme[0].palette.primary.dark,
+              color: globalContext?.theme[0].palette.primary.dark,
               mb: 2,
-              pt:10,
-            }}/>
+              pt: 10,
+            }} >{intl.formatMessage({ id: "INDEX.title.2" })}</Typography>
         </Box>
       </Container>
     </>
