@@ -7,13 +7,13 @@
     box-shadow: 9px 8px 19px #00000096;
     z-index: 1;
     transition: 400ms;
-    height: 350px;
+    height: calc(20vw);
 }
 *:has(.heigerOnHover1){
-    min-height: 400px;
+    min-height: calc(20vw + 20px);
 }
 
 .heigerOnHover1:hover {
     transition: 400ms;
-    height: 400px;
+    height: calc(20vw + 20px);
 }
