@@ -195,7 +195,7 @@ export const getServerSideProps: GetServerSideProps<pageProps> = async () => {
         props: {
             items:
                 [{
-                    lastOnline:Date.now(),
+                    lastOnline: Date.now(),
                     sellerName: "Seller nickName",
                     title: "TestTitle for design",
                     cost: 230,
@@ -214,6 +214,40 @@ export const getServerSideProps: GetServerSideProps<pageProps> = async () => {
                     },
                     {
                         name: "game3",
+                        link: "link3",
+                        id: "id3"
+                    },
+                    {
+                        name: "game4",
+                        link: "link4",
+                        id: "id4"
+                    },
+                    {
+                        name: "game5",
+                        link: "link5",
+                        id: "id5"
+                    }]
+                },
+                {
+                    lastOnline: Date.now(),
+                    sellerName: "Joe_88_seller",
+                    title: "Стим с КС PRIME|DAYZ|WOT",
+                    cost: 450,
+                    boosted: false,
+                    time: Date.now(),
+                    id: "id",
+                    games: [{
+                        name: "CS:GO",
+                        link: "link1",
+                        id: "id1"
+                    },
+                    {
+                        name: "DAYZ",
+                        link: "link2",
+                        id: "id2"
+                    },
+                    {
+                        name: "OSU",
                         link: "link3",
                         id: "id3"
                     },
