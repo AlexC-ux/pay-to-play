@@ -6,19 +6,19 @@ import styles from "../../../styles/header/header.module.css";
 import { INotification } from "../../interfaces/notification";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import axios from "axios";
-import { GlobalContext } from "../../../contextes/globalcontext";
 import { IUser } from "../../interfaces/user";
+import { GlobalContext } from "../../contextes/globalcontext";
 
-export default function NotificationsWindow(params: { state: boolean, dispatch: Dispatch<SetStateAction<boolean>>}) {
+export default function NotificationsWindow(params: { state: boolean, dispatch: Dispatch<SetStateAction<boolean>> }) {
 
     const intl = useIntl();
     const router = useRouter();
     const globalContext = useContext(GlobalContext)!;
     console.log({ globalContext })
 
-    useEffect(()=>{
+    useEffect(() => {
         setNotifications(notif((globalContext.user.value?.notifications)!))
-    },[globalContext.user.value?.notifications])
+    }, [globalContext.user.value?.notifications])
 
     function notif(props: INotification[]): React.ReactElement[] {
         const listItems: React.ReactElement[] = [];

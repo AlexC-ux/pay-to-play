@@ -1,7 +1,7 @@
 import { Theme, ThemeProvider } from "@mui/material";
 import { Context, createContext, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IUser } from "../components/interfaces/user";
-import { darkThemeOptions } from "../themes/dark";
+import { darkThemeOptions } from "../../themes/dark";
+import { IUser } from "../interfaces/user";
 import HasToken from "./Checkers/HasToken";
 
 export interface IGlobalContext {

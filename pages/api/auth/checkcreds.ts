@@ -13,7 +13,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
             email: "value",
             passwordHash: "value",
             balance: 123,
-            displayName: "value",
+            login: "value",
             role: UserRoles.owner, // админская муть
             rank: 1, // админская муть
             statusText: "value",

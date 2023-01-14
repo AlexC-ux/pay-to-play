@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import { IntlProvider } from 'react-intl';
 import { ThemeProvider } from '@emotion/react';
 import { darkThemeOptions } from '../themes/dark';
-import { GlobalContextWrapper } from '../contextes/globalcontext';
 import { Box } from '@mui/material';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import React from 'react';
+import { GlobalContextWrapper } from '../components/contextes/globalcontext';
 
 const messages: { [loc: string]: { [id: string]: string } } = {
   en,

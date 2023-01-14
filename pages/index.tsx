@@ -3,9 +3,9 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/index/indexpage.module.css';
 import { useIntl } from 'react-intl'
-import { GlobalContext } from '../contextes/globalcontext'
 import React from 'react'
 import { Box, Container, Paper, Typography, useTheme } from '@mui/material'
+import { GlobalContext } from '../components/contextes/globalcontext';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -37,7 +37,7 @@ export default function Home() {
           mt: 5,
           mb: -10,
         }}>
-          <Image src="/steam/steam_v1.png" className={styles.heigerOnHover1} alt="steam image" width={600} height={300}/>
+          <Image src="/steam/steam_v1.png" className={styles.heigerOnHover1} alt="steam image" width={600} height={300} />
         </Box>
         <Box
           sx={{

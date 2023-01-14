@@ -1,3 +1,29 @@
 {
-    "HEADER.authbtn":"LogIn"
+    "HEADER.authbtn":"Вход",
+    "HEADER.SEARCH.placeholder":"Поиск..",
+    "HEADER.PROFILENAV.editprofile":"Редактировать профиль",
+    "HEADER.PROFILENAV.showsells":"Мои продажи",
+    "HEADER.PROFILENAV.showbuys":"Мои покупки",
+    "HEADER.PROFILENAV.exit":"Выйти из аккаунта",
+    "HEADER.MAINMENU.shop":"Покупка аккаунтов",
+    "HEADER.NOTIFICATIONS.preload":"Уведомления загружаются",
+    "HEADER.NOTIFICATIONS.nonotifications":"Уведомления отсутствуют",
+
+    "INDEX.title.1":"Аккаунты на любой вкус",
+    "INDEX.title.2":"Выставляйте свои аккаунты",
+
+    "SHOP.buy":"Купить",
+    "SHOP.more":"других игр",
+
+    "AUTH.REGISTER.email":"",
+    "AUTH.REGISTER.passwordRepeat":"",
+    
+    "AUTH.register":"Создать новый аккаунт",
+    "AUTH.signin":"Войти",
+    "AUTH.autherror":"Неверный логин или пароль!",
+    "AUTH.login":"Логин",
+    "AUTH.password":"Пароль",
+    "AUTH.EXIT.message":"Производится выход из аккаунта, подождите",
+    "AUTH.ERROR.wrongPasswd":"Неверный логин или пароль",
+    "AUTH.ERROR.wrongToken":"Токен не действителен, повторите авторизацию"
 }

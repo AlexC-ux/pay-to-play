@@ -14,6 +14,9 @@
 
     "SHOP.buy":"Купить",
     "SHOP.more":"других игр",
+
+    "AUTH.REGISTER.email":"Почта",
+    "AUTH.REGISTER.passwordrepeat":"Повтор пароля",
     
     "AUTH.register":"Создать новый аккаунт",
     "AUTH.signin":"Войти",

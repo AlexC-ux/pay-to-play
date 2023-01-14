@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react"
 import { useIntl } from "react-intl";
-import { GlobalContext } from "../../contextes/globalcontext";
+import { GlobalContext } from "../../components/contextes/globalcontext";
 
 export default function SignIn() {
 

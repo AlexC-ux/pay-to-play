@@ -14,7 +14,7 @@ export interface IUser {
     email: string,
     passwordHash: string,
     balance: number,
-    displayName: string, //maxlen 27
+    login: string, //maxlen 27
     role: UserRoles, // админская муть
     rank: number, // админская муть
     statusText: string,

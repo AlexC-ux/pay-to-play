@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { useIntl } from "react-intl";
-import NeedAuth from "../../contextes/Checkers/NeedAuth";
+import NeedAuth from "../../components/contextes/Checkers/NeedAuth";
 
 export default function MyProfilePage() {
 

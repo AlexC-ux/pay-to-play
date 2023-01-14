@@ -5,12 +5,12 @@ import { display } from "@mui/system";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useIntl } from "react-intl";
 import { ISteamAccountCard } from "../../../components/interfaces/shop/steam";
-import NeedAuth from "../../../contextes/Checkers/NeedAuth";
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import CurrencyRubleOutlinedIcon from '@mui/icons-material/CurrencyRubleOutlined';
 import Image from "next/image";
-import { GlobalContext } from "../../../contextes/globalcontext";
 import React from "react";
+import { GlobalContext } from "../../../components/contextes/globalcontext";
+import NeedAuth from "../../../components/contextes/Checkers/NeedAuth";
 
 
 interface pageProps {

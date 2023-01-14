@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Dispatch, SetStateAction } from "react"
 import { useIntl } from "react-intl";
-import { GlobalContext } from "../../../contextes/globalcontext";
 import styles from "../../../styles/header/header.module.css";
 import OutlinedEyeIcon from '@mui/icons-material/VisibilityOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import CurrencyRubleOutlinedIcon from '@mui/icons-material/CurrencyRubleOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import DoorBackOutlinedIcon from '@mui/icons-material/DoorBackOutlined';
+import { GlobalContext } from "../../contextes/globalcontext";
 
 export default function ProfileNavigation(props: { state: boolean, dispatch: Dispatch<SetStateAction<boolean>> }) {
 

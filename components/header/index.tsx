@@ -2,9 +2,7 @@ import { AppBar, Avatar, Backdrop, Badge, Box, Button, ButtonGroup, Divider, Gri
 import MenuIcon from '@mui/icons-material/Menu';
 import { useIntl } from "react-intl";
 import React, { createRef, useEffect, useState } from "react";
-import { GlobalContext } from "../../contextes/globalcontext";
 import { useRouter } from "next/router";
-import NeedAuth from "../../contextes/Checkers/NeedAuth";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,10 +11,11 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import NotificationsWindow from "./notifications";
 import ProfileNavigation from "./profileNav";
 import MainMenu from "./mainMenu";
-import HasToken from "../../contextes/Checkers/HasToken";
 import axios from "axios";
 import { INotification } from "../interfaces/notification";
 import { IUser } from "../interfaces/user";
+import { GlobalContext } from "../contextes/globalcontext";
+import NeedAuth from "../contextes/Checkers/NeedAuth";
 
 export default function Header() {
 
@@ -43,7 +42,7 @@ export default function Header() {
 
         let newNotifs = 0;
 
-        globalContext.user.dispatch((prev) => {
+        globalContext.user.dispatch((prev:any) => {
           const user: IUser | undefined = prev;
           if (!!user) {
             console.log({ user })
