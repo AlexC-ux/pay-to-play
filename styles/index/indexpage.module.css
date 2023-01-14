@@ -9,9 +9,12 @@
     transition: 400ms;
     height: calc(20vw);
     width: auto;
+    max-width: 1100px;
+    max-height:min-content;
 }
 *:has(.heigerOnHover1){
     min-height: calc(20vw + 20px);
+    max-height: 500px;
 }
 
 .heigerOnHover1:hover {

@@ -10,6 +10,7 @@ import { GlobalContextWrapper } from '../contextes/globalcontext';
 import { Box } from '@mui/material';
 import Header from '../components/header';
 import Footer from '../components/footer';
+import React from 'react';
 
 const messages: { [loc: string]: { [id: string]: string } } = {
   en,
@@ -20,18 +21,25 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const locale: string = router.locale!
 
+  //dynamic html.lang attribute
+  React.useEffect(() => {
+    document.documentElement.lang = locale;
+  })
+
   return (
-    <GlobalContextWrapper>
-      <IntlProvider locale={locale!} messages={messages[locale]}>
+
+    <IntlProvider locale={locale!} messages={messages[locale]}>
+      <GlobalContextWrapper>
         <Box
-        sx={{
-          bgcolor: 'background.default'
-        }}>
-          <Header/>
+          sx={{
+            bgcolor: 'background.default'
+          }}>
+          <Header />
           <Component {...pageProps} />
-          <Footer/>
+          <Footer />
         </Box>
-      </IntlProvider>
-    </GlobalContextWrapper>)
+      </GlobalContextWrapper >
+
+    </IntlProvider>)
 
 }

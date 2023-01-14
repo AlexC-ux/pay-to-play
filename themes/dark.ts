@@ -29,8 +29,8 @@ export const darkThemeOptions: Theme = createTheme(
         default: '#1d2b2a',
         paper: '#243735',
       },
-      getContrastText() {
-          return "#fff"
+      getContrastText(color:string) {
+        return "grey"
       },
       warning: {
         main: '#b18137',
@@ -42,10 +42,10 @@ export const darkThemeOptions: Theme = createTheme(
     typography: {
       fontFamily: 'Montserrat',
     },
-    components:{
-      MuiTypography:{
-        defaultProps:{
-          color:"text.primary"
+    components: {
+      MuiTypography: {
+        defaultProps: {
+          color: "text.primary"
         }
       }
     },

@@ -1,0 +1,53 @@
+@media screen and (max-width: 920px) {
+    .search {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .nick {
+        display: none;
+    }
+
+    .paddingResizable {
+        padding-left: 5px;
+        padding-right: 5px;
+        max-width: 50px;
+    }
+
+    .paddingResizable>span {
+        max-width: 50px;
+    }
+}
+
+@media screen and (max-width: 365px) {
+    .messages {
+        display: none;
+    }
+}
+
+.navPaper {
+    width: 270px;
+}
+.navPaperNotifs {
+    width: 80vw;
+    max-width:300px;
+}
+
+@media screen and (min-width: 400px) {
+    .navPaper {
+        width: 300px;
+    }
+    .navPaperNotifs {
+        max-width: 400px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .navPaper {
+        width: 300px;
+    }
+    .navPaperNotifs {
+        max-width: 600px;
+    }
+}
