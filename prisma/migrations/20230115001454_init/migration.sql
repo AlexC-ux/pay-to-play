@@ -21,11 +21,11 @@ CREATE TABLE "Users" (
 -- CreateTable
 CREATE TABLE "Notifications" (
     "id" TEXT NOT NULL,
-    "time" TIMESTAMP(3) NOT NULL,
+    "time" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "title" TEXT NOT NULL,
     "text" TEXT NOT NULL,
-    "new" BOOLEAN,
-    "usersId" TEXT,
+    "new" BOOLEAN NOT NULL DEFAULT true,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Notifications_pkey" PRIMARY KEY ("id")
 );
@@ -46,4 +46,4 @@ CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
 CREATE UNIQUE INDEX "Notifications_id_key" ON "Notifications"("id");
 
 -- AddForeignKey
-ALTER TABLE "Notifications" ADD CONSTRAINT "Notifications_usersId_fkey" FOREIGN KEY ("usersId") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Notifications" ADD CONSTRAINT "Notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

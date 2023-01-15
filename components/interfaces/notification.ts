@@ -1,7 +1,8 @@
 export interface INotification {
     id: string,
-    time: number,
+    time: Date,
     title: string,
     text: string,
-    new?:boolean,
+    new: boolean,
+    userId: string,
 }

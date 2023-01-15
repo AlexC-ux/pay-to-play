@@ -23,13 +23,13 @@ model Users {
 }
 
 model Notifications {
-  id      String   @id @unique @default(cuid())
-  time    DateTime
-  title   String
-  text    String
-  new     Boolean?
-  usersId String?
-  Users   Users?   @relation(fields: [usersId], references: [id])
+  id     String   @id @unique @default(cuid())
+  time   DateTime @default(now())
+  title  String
+  text   String
+  new    Boolean  @default(true)
+  userId String
+  user   Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum UserRoles {

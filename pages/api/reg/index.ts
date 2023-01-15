@@ -11,6 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
     const prisma = new PrismaClient();
 
     async function main(props: { token: string }) {
+
         await prisma.users.create({
             data: {
                 token: props.token,
@@ -22,7 +23,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
                 rating: 0,
                 rank: 0,
                 balance: 0,
+                notifications: {
+                    create: [{ title: "Добро пожаловать!", text: "В этом разделе будут собраны уведомления." }]
+                }
             },
+            include: {
+                notifications: true,
+            }
         }).then(newUser => {
             const user = <unknown>newUser;
             res.json(<IUser>user);
@@ -31,16 +38,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
 
     verifCreds().then(isValid => {
         if (isValid) {
-            const token = `${sha512(`${sha256(login)}.xxxx${sha256(email)}.yyyy${sha256(passwordHash.substring(10, 30))}`)}.x${sha256("email")}`
-            main({ token })
-                .then(async () => {
-                    await prisma.$disconnect()
-                })
-                .catch(async (e) => {
-                    console.error(e)
-                    await prisma.$disconnect()
-                    process.exit(1)
-                })
+            sha512(`${email}.${passwordHash.substring(0, 4)}.${passwordHash.substring(passwordHash.length - 10, passwordHash.length - 1)}.${login}`).then(token => {
+                main({ token })
+                    .then(async () => {
+                        await prisma.$disconnect()
+                    })
+                    .catch(async (e) => {
+                        console.error(e)
+                        await prisma.$disconnect()
+                        process.exit(1)
+                    })
+            })
         } else {
             res.json({ "error": "AUTH.ERROR.wrongToken" })
         }

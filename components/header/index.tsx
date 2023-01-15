@@ -34,32 +34,45 @@ export default function Header() {
     router.push(`/${intl.locale}`)
   }
 
+  function markNotifsRead() {
+    setNewNotifsCount(0);
+    //TODO fetch to change new notifs
+  }
 
-  function updateNotifications() {
-    axios.post("/api/user/getNotifications",
-      { token: globalContext.user.value!.token }).then((response) => {
-        const notifs: INotification[] = response.data;
 
-        let newNotifs = 0;
+  useEffect(() => {
+    if (!!globalContext.user.value) {
+      axios.post("/api/user/getNotifications",
+        { token: globalContext.user.value!.token }).then((response) => {
+          const notifs: INotification[] = response.data;
 
-        globalContext.user.dispatch((prev:any) => {
-          const user: IUser | undefined = prev;
-          if (!!user) {
-            console.log({ user })
-            user.notifications = notifs;
-            notifs.forEach(n => {
-              if (!!n.new) {
-                newNotifs += 1
+          let newNotifs = 0;
+
+          if (Array.isArray(notifs)) {
+            globalContext.user.dispatch((prev: any) => {
+              const user: IUser | undefined = prev;
+              if (!!user) {
+                console.log({ user })
+                user.notifications = notifs;
+                if (!!notifs) {
+                  notifs.forEach(n => {
+                    if (!!n.new) {
+                      newNotifs += 1
+                    }
+                  })
+                }
+                setNewNotifsCount(newNotifs)
+                return user
+              } else {
+                return undefined
               }
             })
-            setNewNotifsCount(newNotifs)
-            return user
-          } else {
-            return undefined
           }
         })
-      })
-  }
+
+    }
+  },
+    [globalContext.user.value])
 
   function CheckAllNotifs() {
     //TODO post все уведомления прочитаны
@@ -72,11 +85,6 @@ export default function Header() {
         display: "block",
         position: "relative",
         height: "64px",
-      }}
-      onLoad={() => {
-        if (!!globalContext.user.value) {
-          updateNotifications();
-        }
       }}>
       <Toolbar>
         <IconButton
@@ -171,7 +179,7 @@ export default function Header() {
                 variant="text"
                 endIcon={
                   <Badge badgeContent={newNotifsCount} color="primary"><NotificationsIcon /></Badge>}
-                onClick={() => { setNotifsPreviewShown(true); }}
+                onClick={() => { setNotifsPreviewShown(true); markNotifsRead(); }}
                 sx={{
                   px: 2,
                   color: "text.primary",
@@ -194,7 +202,7 @@ export default function Header() {
                   borderRadius: 0
                 }}
               >
-                <p className={styles.nick}>{globalContext.user.value.displayName}</p>
+                <p className={styles.nick}>{globalContext.user.value.login}</p>
               </Button>
             </Stack>
             {

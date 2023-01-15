@@ -26,7 +26,7 @@ export default function NotificationsWindow(params: { state: boolean, dispatch: 
         let newNotifsCount = 0;
         if (props.length == 0) {
             console.log({ props })
-            return notif([{ id: "-1", title: "уведомлений нет", time: Date.now(), text: "" }])
+            return notif([{ id: "-1", title: "уведомлений нет", time: new Date(), text: "", new: false, userId: globalContext.user.value!.id }])
         }
         else {
             for (let index = 0; index < props.length; index++) {
@@ -68,7 +68,7 @@ export default function NotificationsWindow(params: { state: boolean, dispatch: 
         return listItems;
     }
 
-    const [notifications, setNotifications] = useState(notif([{ id: "-1", title: intl.formatMessage({ id: "HEADER.NOTIFICATIONS.preload" }), time: Date.now(), text: "" }]))
+    const [notifications, setNotifications] = useState(notif([{ id: "-1", title: intl.formatMessage({ id: "HEADER.NOTIFICATIONS.preload" }), time: new Date(), text: "", new: false, userId: globalContext.user.value!.id }]))
 
     return <Backdrop
         open={params.state}

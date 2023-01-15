@@ -17,6 +17,9 @@
 
     "AUTH.REGISTER.email":"Почта",
     "AUTH.REGISTER.passwordrepeat":"Повтор пароля",
+    "AUTH.REGISTER.ERROR.wrongmail":"Ошибка в адресе почты",
+    "AUTH.REGISTER.ERROR.passwordsnotequal":"Пароли не совпадают",
+    "AUTH.REGISTER.ERROR.passwordlength":"Пароль должен быть в длинну от 7 символов",
     
     "AUTH.register":"Создать новый аккаунт",
     "AUTH.signin":"Войти",

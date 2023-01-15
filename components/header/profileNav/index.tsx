@@ -145,7 +145,7 @@ export default function ProfileNavigation(props: { state: boolean, dispatch: Dis
                             p: 0,
                         }}>
                         <ListItemButton
-                        onClick={()=>{router.push("/auth/exit")}}
+                            onClick={() => { router.push("/auth/exit") }}
                             sx={{
                                 borderRadius: 1,
                                 px: 1,

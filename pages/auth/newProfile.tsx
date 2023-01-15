@@ -7,6 +7,8 @@ import { useIntl } from "react-intl";
 import { GlobalContext } from "../../components/contextes/globalcontext";
 import Error from "../../components/interfaces/error";
 import { IUser } from "../../components/interfaces/user";
+import { sha512, sha256 } from 'crypto-hash';
+
 
 export default function SignIn() {
     const intl = useIntl();
@@ -15,24 +17,44 @@ export default function SignIn() {
 
     const [error, setError]: [any, Dispatch<SetStateAction<any>>] = useState({ text: undefined });
 
+    const [regData, setRegData] = useState({ login: "", password1: "", password2: "", email: "" })
+
     function createNewAccount() {
-        axios.post("/api/auth/checkcreds", {
-            username: "0",
-            password: "123"
-        }).then((result) => {
-            const responseUser: IUser = result.data;
-            const responseError: Error = result.data;
+        console.log({ regData })
+        if (regData.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+            if (regData.password1 == regData.password2) {
+                if (regData.password1.length < 7) {
+                    setError({ text: intl.formatMessage({ id: "AUTH.REGISTER.ERROR.passwordlength" }) })
+                } else {
+                    sha512(regData.password1).then(hash => {
+                        axios.post("/api/reg",
+                            {
+                                email: regData.email,
+                                passwordHash: hash,
+                                login: regData.login
+                            }).then((result) => {
+                                const responseUser: IUser = result.data;
+                                const responseError: Error = result.data;
 
-            console.log({ responseError })
+                                console.log({ responseError })
 
-            if (!!responseError.error) {
-                setError({ text: intl.formatMessage({ id: responseError.error }) })
+                                if (!!responseError.error) {
+                                    setError({ text: intl.formatMessage({ id: responseError.error }) })
+                                } else {
+                                    globalContext.user.dispatch(responseUser);
+                                    localStorage.setItem("userToken", responseUser.token)
+                                    router.push("/userprofile/me")
+                                }
+                            })
+                    })
+
+                }
             } else {
-                globalContext.user.dispatch(responseUser);
-                localStorage.setItem("userToken", responseUser.token)
-                router.push("/userprofile/me")
+                setError({ text: intl.formatMessage({ id: "AUTH.REGISTER.ERROR.passwordsnotequal" }) })
             }
-        })
+        } else {
+            setError({ text: intl.formatMessage({ id: "AUTH.REGISTER.ERROR.wrongmail" }) })
+        }
     }
     return (
         <>
@@ -61,6 +83,7 @@ export default function SignIn() {
                             <Typography
                                 variant="subtitle1">{intl.formatMessage({ id: "AUTH.login" })}</Typography>
                             <Input
+                                onChange={(input) => { setRegData((prev) => { return { ...prev, login: input.target.value } }) }}
                                 name="username"
                                 type="text"
                                 fullWidth={true} />
@@ -69,6 +92,7 @@ export default function SignIn() {
                             <Typography
                                 variant="subtitle1">{intl.formatMessage({ id: "AUTH.REGISTER.email" })}</Typography>
                             <Input
+                                onChange={(input) => { setRegData((prev) => { return { ...prev, email: input.target.value } }) }}
                                 name="email"
                                 type="text"
                                 fullWidth={true} />
@@ -77,6 +101,7 @@ export default function SignIn() {
                             <Typography
                                 variant="subtitle1">{intl.formatMessage({ id: "AUTH.password" })}</Typography>
                             <Input
+                                onChange={(input) => { setRegData((prev) => { return { ...prev, password1: input.target.value } }) }}
                                 name="password" type="password"
                                 fullWidth={true} />
                         </Grid>
@@ -85,6 +110,7 @@ export default function SignIn() {
                             <Typography
                                 variant="subtitle1">{intl.formatMessage({ id: "AUTH.REGISTER.passwordrepeat" })}</Typography>
                             <Input
+                                onChange={(input) => { setRegData((prev) => { return { ...prev, password2: input.target.value } }) }}
                                 name="password2" type="password"
                                 fullWidth={true} />
                         </Grid>
