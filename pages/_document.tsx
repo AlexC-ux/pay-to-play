@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html style={
       {
-        backgroundColor:'#1d2b2a'
+        backgroundColor: '#1d2b2a'
       }
     }>
       <Head />

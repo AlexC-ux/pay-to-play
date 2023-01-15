@@ -25,7 +25,10 @@ export default function SignIn() {
             if (regData.password1 == regData.password2) {
                 if (regData.password1.length < 7) {
                     setError({ text: intl.formatMessage({ id: "AUTH.REGISTER.ERROR.passwordlength" }) })
-                } else {
+                } else if (regData.login.length < 7) {
+                    setError({ text: intl.formatMessage({ id: "AUTH.REGISTER.ERROR.loginlength" }) })
+                }
+                else {
                     sha512(regData.password1).then(hash => {
                         axios.post("/api/reg",
                             {

@@ -47,7 +47,7 @@ export const darkThemeOptions: Theme = createTheme(
         defaultProps: {
           color: "text.primary"
         }
-      }
+      },
     },
   }
 )

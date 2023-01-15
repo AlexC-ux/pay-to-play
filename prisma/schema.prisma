@@ -8,18 +8,20 @@ datasource db {
 }
 
 model Users {
-  id            String          @id @unique @default(cuid())
-  role          UserRoles       @default(user)
-  rating        Int
-  token         String          @unique
-  login         String          @unique
-  rank          Int
-  email         String          @unique
-  passwordHash  String
-  balance       Decimal
-  statusText    String
-  avatar        String
-  notifications Notifications[]
+  id                String          @id @unique @default(cuid())
+  role              UserRoles       @default(user)
+  rating            Int
+  token             String          @unique
+  login             String          @unique
+  rank              Int
+  email             String          @unique
+  passwordHash      String
+  balance           Decimal
+  statusText        String
+  avatar            String
+  notifications     Notifications[]
+  accounts          AccountsStorage @relation(fields: [accountsStorageId], references: [id])
+  accountsStorageId String
 }
 
 model Notifications {
@@ -29,7 +31,36 @@ model Notifications {
   text   String
   new    Boolean  @default(true)
   userId String
-  user   Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   Users    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model AccountsStorage {
+  id            String         @id @unique @default(cuid())
+  User          Users[]
+  SteamAccounts SteamAccount[]
+}
+
+model SteamAccount {
+  id                String                  @id @unique @default(cuid())
+  login             String
+  password          String
+  emailLogin        String
+  emailPassword     String
+  link              String
+  lastActivity      DateTime
+  state             MarketplaceAccountState @default(validating)
+  games             SteamGame[]
+  AccountsStorage   AccountsStorage         @relation(fields: [accountsStorageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  accountsStorageId String
+}
+
+model SteamGame {
+  id                String        @id @unique @default(cuid())
+  name              String
+  previewAvatarLink String
+  gameStoreLink    String
+  SteamAccount      SteamAccount? @relation(fields: [steamAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  steamAccountId    String?
 }
 
 enum UserRoles {
@@ -39,4 +70,11 @@ enum UserRoles {
   moderator
   admin
   owner
+}
+
+enum MarketplaceAccountState {
+  validating
+  notValid
+  selling
+  sold
 }

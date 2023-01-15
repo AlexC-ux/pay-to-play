@@ -20,6 +20,8 @@
     "AUTH.REGISTER.ERROR.wrongmail":"Ошибка в адресе почты",
     "AUTH.REGISTER.ERROR.passwordsnotequal":"Пароли не совпадают",
     "AUTH.REGISTER.ERROR.passwordlength":"Пароль должен быть в длинну от 7 символов",
+    "AUTH.REGISTER.ERROR.loginlength":"Логин должен быть в длинну от 7 символов",
+    "AUTH.REGISTER.ERROR.nojschecks":"Клиент не произвёл валидацию.",
     
     "AUTH.register":"Создать новый аккаунт",
     "AUTH.signin":"Войти",
@@ -28,5 +30,16 @@
     "AUTH.password":"Пароль",
     "AUTH.EXIT.message":"Производится выход из аккаунта, подождите",
     "AUTH.ERROR.wrongPasswd":"Неверный логин или пароль",
-    "AUTH.ERROR.wrongToken":"Токен не действителен, повторите авторизацию"
+    "AUTH.ERROR.wrongToken":"Токен не действителен, повторите авторизацию",
+
+    "SHOP.ADD.STEAM.title":"Продажа steam",
+    "SHOP.ADD.STEAM.accounttitle":"Заголовок карточки аккаунта",
+    "SHOP.ADD.STEAM.accounttext":"Краткое описание аккаунта",
+    "SHOP.ADD.STEAM.login":"Логин",
+    "SHOP.ADD.STEAM.password":"Пароль",
+    "SHOP.ADD.STEAM.tit1le":"Продажа steam",
+    "SHOP.ADD.STEAM.tit1231le":"Продажа steam",
+    "SHOP.ADD.STEAM.tit12312le":"Продажа steam",
+
+    "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста и [математических формул](https://docs.github.com/ru/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)\n\nПримеры использования:\n\n`$\\sqrt{3x-1}+(1+x)^2$`:\n\n$\\sqrt{3x-1}+(1+x)^2$ \n\n`~~текст~~`:\n\n~~текст~~"
 }

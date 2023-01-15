@@ -25,6 +25,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
                 balance: 0,
                 notifications: {
                     create: [{ title: "Добро пожаловать!", text: "В этом разделе будут собраны уведомления." }]
+                },
+                accounts: {
+                    create: {}
                 }
             },
             include: {
@@ -50,7 +53,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
                     })
             })
         } else {
-            res.json({ "error": "AUTH.ERROR.wrongToken" })
+            res.json({ "error": "AUTH.REGISTER.ERROR.nojschecks" })
         }
     })
 
@@ -68,9 +71,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
             &&
             login.length > 6
         ) {
-
+            return true
+        } else {
+            return false
         }
-        return true
     }
 
 }
