@@ -37,12 +37,14 @@ export default function NotificationsWindow(params: { state: boolean, dispatch: 
                 const notifDate = new Date(notification.time);
                 const notifDateString = (`${notifDate.getFullYear()}.${notifDate.getMonth() < 10 ? `0${notifDate.getMonth() + 1}` : notifDate.getMonth() + 1}.${notifDate.getDate()} ${notifDate.getHours()}:${notifDate.getMinutes()}`);
                 listItems[index] = <ListItem key={notification.id}
-                >
+                sx={{
+                    px:1,
+                    py:2
+                }}>
                     <ListItemButton
                         sx={{
                             borderRadius: 1,
-                            px: 1,
-                            py: 1
+                            p:0
                         }
                         }>
                         <ListItemIcon><NotificationsNoneOutlinedIcon /></ListItemIcon>
@@ -85,10 +87,11 @@ export default function NotificationsWindow(params: { state: boolean, dispatch: 
                 right: 0,
                 top: "74px",
                 borderRadius: 3,
+                p:0
             }}>
             <List
                 sx={{
-                    p: 2,
+                    p: 0.2,
                 }}>
                 {notifications}
             </List>

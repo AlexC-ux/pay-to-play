@@ -41,5 +41,9 @@
     "SHOP.ADD.STEAM.tit1231le":"Продажа steam",
     "SHOP.ADD.STEAM.tit12312le":"Продажа steam",
 
-    "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста и [математических формул](https://docs.github.com/ru/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)\n\nПримеры использования:\n\n`$\\sqrt{3x-1}+(1+x)^2$`:\n\n$\\sqrt{3x-1}+(1+x)^2$ \n\n`~~текст~~`:\n\n~~текст~~\n\n_[#28dd76]colored text[/#28dd76]_\n\n[#28dd76]colored text[/#28dd76]"
+    "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста и [математических формул](https://docs.github.com/ru/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)\n\nПримеры использования:\n\n`$\\sqrt{3x-1}+(1+x)^2$`:\n\n$\\sqrt{3x-1}+(1+x)^2$ \n\n`~~текст~~`:\n\n~~текст~~\n\nВы так же можете использовать следующую конструкцию:\n\n `[cssprop:value1;secondprop:value2;]text[endStyle]`\n\nНапример: `[color:yellow]text[endStyle]`\n\nПокажет это: [color:yellow]text[endStyle]",
+    "MDEDITOR.link":"Ссылка",
+    "MDEDITOR.linkLabel":"Текст ссылки",
+    "MDEDITOR.image":"Ссылка на картинку",
+    "MDEDITOR.imageLabel":"Замещающий текст"
 }

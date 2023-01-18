@@ -6,22 +6,55 @@ import rehypeMathjax from "rehype-mathjax";
 import React from "react";
 import reactStringReplace from "react-string-replace";
 
+const convertStylesStringToObject = (stringStyles: string) => typeof stringStyles === 'string' ? stringStyles
+    .split(';')
+    .reduce((acc, style) => {
+        const colonPosition = style.indexOf(':')
+
+        if (colonPosition === -1) {
+            return acc
+        }
+
+        const
+            camelCaseProperty = style
+                .substring(0, colonPosition)
+                .trim()
+                .replace(/^-ms-/, 'ms-')
+                .replace(/-./g, c => c.substr(1).toUpperCase()),
+            value = style.substr(colonPosition + 1).trim()
+
+        return value ? { ...acc, [camelCaseProperty]: value } : acc
+    }, {}) : {}
+
 export default function DisplayMdWrapper(props: { children: string }) {
 
 
-
-    function getCustomComponents({ node, className, children, ...props }: any): JSX.Element {
-        console.log({ node, className, children, ...props })
-        return <p>
-            {
-                //COLORS
-                reactStringReplace(children, /(\[#.*?\].*?\[\/#.*?\])/gm, (match, index, offset) => {
-                    const color = /\[([^\/]*?)\]/g.exec(match)![1]
-                    const text = /\[#.*?\](.*?)\[\/#.*?\]/g.exec(match)![1]
-                    return <span key={index} style={{ color: color }}>{text}</span>
+    function replaceWithStyle(children: any) {
+        const customColorsExpr = /(\[.*?\].*?\[endStyle\])/gm;
+        return reactStringReplace(children, customColorsExpr, (match, index, offset) => {
+            const style = /\[(.*?)\]/g.exec(match)
+            const child = /\[(.*?)\](.*?)\[(.*?)\]/g.exec(match)
+            console.log({ style, child })
+            if (!!child && !!style && !!style[1] && !!child[2]) {
+                const a = `color:"red";width:200px;`
+                a.split(";").map(el => {
+                    return `"${el.split(":")[0]}":}`
                 })
+                return React.createElement("span", { style: convertStylesStringToObject(style[1]) }, <>{child[2]}</>)
+            } else {
+                return match
             }
-        </p>
+        })
+    }
+
+    const checkCustomTags = ({ node, className, children, ...props }: any) => {
+        console.log({ node, className, children, ...props })
+
+        let replaced = replaceWithStyle(children)
+
+        return React.createElement(node.tagName, {
+            children: replaced
+        })
     }
 
     return (
@@ -29,15 +62,18 @@ export default function DisplayMdWrapper(props: { children: string }) {
             remarkPlugins: [remarkGfm, remarkMath],
             rehypePlugins: [rehypeMathjax],
             components: {
-                p: params => { return getCustomComponents(params) },
-                strong: params => { return getCustomComponents(params) },
-                em: params => { return getCustomComponents(params) },
-                h1: params => { return getCustomComponents(params) },
-                h2: params => { return getCustomComponents(params) },
-                h3: params => { return getCustomComponents(params) },
-                h4: params => { return getCustomComponents(params) },
-                h5: params => { return getCustomComponents(params) },
-                h6: params => { return getCustomComponents(params) },
+                p: checkCustomTags,
+                li: checkCustomTags,
+                ul: checkCustomTags,
+                h1: checkCustomTags,
+                h2: checkCustomTags,
+                h3: checkCustomTags,
+                h4: checkCustomTags,
+                h5: checkCustomTags,
+                h6: checkCustomTags,
+                strong: checkCustomTags,
+                del: checkCustomTags,
+                em: checkCustomTags,
             },
             children: props.children
         })

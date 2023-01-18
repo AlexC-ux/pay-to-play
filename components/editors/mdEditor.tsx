@@ -1,4 +1,4 @@
-import { Backdrop, Box, Button, FormControl, FormControlLabel, FormGroup, Grid, List, ListItem, Menu, MenuItem, Paper, SxProps } from "@mui/material";
+import { Backdrop, Box, Button, FormControl, FormControlLabel, FormGroup, Grid, List, ListItem, Menu, MenuItem, Paper, Stack, SxProps } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
@@ -196,176 +196,169 @@ export default function MdEditor(props: { styleSx?: SxProps }) {
         sx={props.styleSx}>
         <Grid container>
             <Grid item xs={12}>
-                <Grid container
-                    sx={{
-                        pb: 0.5,
-                        px: 1,
-                        justifyContent: "end",
-                    }}>
-                    <Grid item xs={"auto"}>
-                        <ButtonGroup
-                            variant="text"
-                            size="small">
-                            <Button
-                                id="link-button"
-                                color="secondary"
-                                variant="text"
-                                disabled={!modeEdit}
-                                aria-controls={insertLinkMenuAnchorOpen ? 'link-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={insertLinkMenuAnchorOpen ? 'true' : undefined}
-                                onClick={handleInsertLinkMenuAnchorClick}
-                            ><InsertLinkOutlinedIcon /></Button>
+                <Stack
+                    direction={"row"}
+                    maxWidth="90vw"
+                    flexWrap={"wrap"}
+                    justifyContent="flex-end">
+                    <Button
+                        id="link-button"
+                        color="secondary"
+                        variant="text"
+                        disabled={!modeEdit}
+                        aria-controls={insertLinkMenuAnchorOpen ? 'link-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={insertLinkMenuAnchorOpen ? 'true' : undefined}
+                        onClick={handleInsertLinkMenuAnchorClick}
+                    ><InsertLinkOutlinedIcon /></Button>
 
-                            <Menu
-                                id="link-menu"
-                                anchorEl={insertLinkMenuAnchor}
-                                open={insertLinkMenuAnchorOpen}
-                                onClose={handleInsertLinkMenuAnchorClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'link-button',
-                                }}
-                            >
-                                <MenuItem>
-                                    <FormGroup>
-                                        <FormControl>
-                                            <Typography
-                                                align="center">Ссылка</Typography>
-                                            <TextField
-                                                onChange={(input) => { insertLinkParams.uri = input.target.value }}
-                                            ></TextField>
-                                        </FormControl>
-                                        <FormControl
-                                            sx={{
-                                                py: 2
-                                            }}>
-                                            <Typography
-                                                align="center">Текст ссылки</Typography>
-                                            <TextField
-                                                onChange={(input) => { insertLinkParams.label = input.target.value }}></TextField>
-                                        </FormControl>
-                                        <FormControl>
-                                            <Button
-                                                fullWidth={true}
-                                                color="secondary"
-                                                variant="outlined"
-                                                onClick={(event) => { handleInsertLinkMenuAnchorClose(event); insertLink() }}>Добавить</Button>
-                                        </FormControl>
-                                    </FormGroup>
-                                </MenuItem>
-                            </Menu>
-                            <Button
-                                id="title-button"
-                                color="secondary"
-                                variant="text"
-                                disabled={!modeEdit}
-                                aria-controls={titleMenuAnchorOpen ? 'title-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={titleMenuAnchorOpen ? 'true' : undefined}
-                                onClick={handleTitleMenuAnchorClick}
-                            >
-                                <TitleOutlinedIcon />
-                            </Button>
-                            <Menu
-                                id="title-menu"
-                                anchorEl={titleMenuAnchor}
-                                open={titleMenuAnchorOpen}
-                                onClose={handleTitleMenuAnchorClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'title-button',
-                                }}
-                            >
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h1) }}><TitleOutlinedIcon />1</MenuItem>
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h2) }}><TitleOutlinedIcon />2</MenuItem>
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h3) }}><TitleOutlinedIcon />3</MenuItem>
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h4) }}><TitleOutlinedIcon />4</MenuItem>
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h5) }}><TitleOutlinedIcon />5</MenuItem>
-                                <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h6) }}><TitleOutlinedIcon />6</MenuItem>
-                            </Menu>
-                            <Button
-                                color="secondary"
-                                disabled={!modeEdit}
-                                variant="text"
-                                onClick={() => { handleFormatAction(FormatActions.bold) }}><FormatBoldOutlinedIcon /></Button>
-                            <Button
-                                color="secondary"
-                                disabled={!modeEdit}
-                                variant="text"
-                                onClick={() => { handleFormatAction(FormatActions.italic) }}><FormatItalicIcon /></Button>
-                            <Button
-                                color="secondary"
-                                disabled={!modeEdit}
-                                variant="text"
-                                onClick={() => { handleFormatAction(FormatActions.strikethrough) }}><FormatStrikethroughIcon /></Button>
-                            <Button
-                                color="secondary"
-                                disabled={!modeEdit}
-                                variant="text"
-                                onClick={() => { handleFormatAction(FormatActions.listbullet) }}><FormatListBulletedOutlinedIcon /></Button>
-                            <Button
-                                color="secondary"
-                                disabled={!modeEdit}
-                                variant="text"
-                                onClick={() => { handleFormatAction(FormatActions.listnumbered) }}><FormatListNumberedOutlinedIcon /></Button>
-                            <Button
-                                id="image-button"
-                                color="secondary"
-                                variant="text"
-                                disabled={!modeEdit}
-                                aria-controls={insertImageMenuAnchorOpen ? 'image-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={insertImageMenuAnchorOpen ? 'true' : undefined}
-                                onClick={handleInsertImageMenuAnchorClick}
-                            ><ImageOutlinedIcon /></Button>
-                            <Menu
-                                id="image-menu"
-                                anchorEl={insertImageMenuAnchor}
-                                open={insertImageMenuAnchorOpen}
-                                onClose={handleInsertImageMenuAnchorClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'image-button',
-                                }}
-                            >
-                                <MenuItem>
-                                    <FormGroup>
-                                        <FormControl>
-                                            <Typography
-                                                align="center">Ссылка на изображение</Typography>
-                                            <TextField
-                                                onChange={(input) => { insertImageParams.uri = input.target.value }}
-                                            ></TextField>
-                                        </FormControl>
-                                        <FormControl
-                                            sx={{
-                                                py: 2
-                                            }}>
-                                            <Typography
-                                                align="center">Замещающий текст</Typography>
-                                            <TextField
-                                                onChange={(input) => { insertImageParams.label = input.target.value }}></TextField>
-                                        </FormControl>
-                                        <FormControl>
-                                            <Button
-                                                fullWidth={true}
-                                                color="secondary"
-                                                variant="outlined"
-                                                onClick={(event) => { handleInsertImageMenuAnchorClose(event); insertImage() }}>Добавить</Button>
-                                        </FormControl>
-                                    </FormGroup>
-                                </MenuItem>
-                            </Menu>
-                            <Button
-                                color="secondary"
-                                onClick={() => { setModeEdit(!modeEdit) }}
-                                variant="text">{modeEdit ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}</Button>
+                    <Menu
+                        id="link-menu"
+                        anchorEl={insertLinkMenuAnchor}
+                        open={insertLinkMenuAnchorOpen}
+                        onClose={handleInsertLinkMenuAnchorClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'link-button',
+                        }}
+                    >
+                        <MenuItem>
+                            <FormGroup>
+                                <FormControl>
+                                    <Typography
+                                        align="center">{intl.formatMessage({ id: "MDEDITOR.link" })}</Typography>
+                                    <TextField
+                                        onChange={(input) => { insertLinkParams.uri = input.target.value }}
+                                    ></TextField>
+                                </FormControl>
+                                <FormControl
+                                    sx={{
+                                        py: 2
+                                    }}>
+                                    <Typography
+                                        align="center">{intl.formatMessage({ id: "MDEDITOR.linkLabel" })}</Typography>
+                                    <TextField
+                                        onChange={(input) => { insertLinkParams.label = input.target.value }}></TextField>
+                                </FormControl>
+                                <FormControl>
+                                    <Button
+                                        fullWidth={true}
+                                        color="secondary"
+                                        variant="outlined"
+                                        onClick={(event) => { handleInsertLinkMenuAnchorClose(event); insertLink() }}>Добавить</Button>
+                                </FormControl>
+                            </FormGroup>
+                        </MenuItem>
+                    </Menu>
+                    <Button
+                        id="title-button"
+                        color="secondary"
+                        variant="text"
+                        disabled={!modeEdit}
+                        aria-controls={titleMenuAnchorOpen ? 'title-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={titleMenuAnchorOpen ? 'true' : undefined}
+                        onClick={handleTitleMenuAnchorClick}
+                    >
+                        <TitleOutlinedIcon />
+                    </Button>
+                    <Menu
+                        id="title-menu"
+                        anchorEl={titleMenuAnchor}
+                        open={titleMenuAnchorOpen}
+                        onClose={handleTitleMenuAnchorClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'title-button',
+                        }}
+                    >
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h1) }}><TitleOutlinedIcon />1</MenuItem>
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h2) }}><TitleOutlinedIcon />2</MenuItem>
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h3) }}><TitleOutlinedIcon />3</MenuItem>
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h4) }}><TitleOutlinedIcon />4</MenuItem>
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h5) }}><TitleOutlinedIcon />5</MenuItem>
+                        <MenuItem onClick={() => { handleTitleMenuAnchorClose(); handleFormatAction(FormatActions.h6) }}><TitleOutlinedIcon />6</MenuItem>
+                    </Menu>
+                    <Button
+                        color="secondary"
+                        disabled={!modeEdit}
+                        variant="text"
+                        onClick={() => { handleFormatAction(FormatActions.bold) }}><FormatBoldOutlinedIcon /></Button>
+                    <Button
+                        color="secondary"
+                        disabled={!modeEdit}
+                        variant="text"
+                        onClick={() => { handleFormatAction(FormatActions.italic) }}><FormatItalicIcon /></Button>
+                    <Button
+                        color="secondary"
+                        disabled={!modeEdit}
+                        variant="text"
+                        onClick={() => { handleFormatAction(FormatActions.strikethrough) }}><FormatStrikethroughIcon /></Button>
+                    <Button
+                        color="secondary"
+                        disabled={!modeEdit}
+                        variant="text"
+                        onClick={() => { handleFormatAction(FormatActions.listbullet) }}><FormatListBulletedOutlinedIcon /></Button>
+                    <Button
+                        color="secondary"
+                        disabled={!modeEdit}
+                        variant="text"
+                        onClick={() => { handleFormatAction(FormatActions.listnumbered) }}><FormatListNumberedOutlinedIcon /></Button>
+                    <Button
+                        id="image-button"
+                        color="secondary"
+                        variant="text"
+                        disabled={!modeEdit}
+                        aria-controls={insertImageMenuAnchorOpen ? 'image-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={insertImageMenuAnchorOpen ? 'true' : undefined}
+                        onClick={handleInsertImageMenuAnchorClick}
+                    ><ImageOutlinedIcon /></Button>
+                    <Menu
+                        id="image-menu"
+                        anchorEl={insertImageMenuAnchor}
+                        open={insertImageMenuAnchorOpen}
+                        onClose={handleInsertImageMenuAnchorClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'image-button',
+                        }}
+                    >
+                        <MenuItem>
+                            <FormGroup>
+                                <FormControl>
+                                    <Typography
+                                        align="center">{intl.formatMessage({ id: "MDEDITOR.image" })}</Typography>
+                                    <TextField
+                                        onChange={(input) => { insertImageParams.uri = input.target.value }}
+                                    ></TextField>
+                                </FormControl>
+                                <FormControl
+                                    sx={{
+                                        py: 2
+                                    }}>
+                                    <Typography
+                                        align="center">{intl.formatMessage({ id: "MDEDITOR.imageLabel" })}</Typography>
+                                    <TextField
+                                        onChange={(input) => { insertImageParams.label = input.target.value }}></TextField>
+                                </FormControl>
+                                <FormControl>
+                                    <Button
+                                        fullWidth={true}
+                                        color="secondary"
+                                        variant="outlined"
+                                        onClick={(event) => { handleInsertImageMenuAnchorClose(event); insertImage() }}>Добавить</Button>
+                                </FormControl>
+                            </FormGroup>
+                        </MenuItem>
+                    </Menu>
+                    <Button
+                        color="secondary"
+                        onClick={() => { setModeEdit(!modeEdit) }}
+                        variant="text">{modeEdit ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}</Button>
 
-                            <Button
-                                color="secondary"
-                                onClick={() => { messageDial.setShown(true) }}
-                                variant="text"><HelpOutlineIcon /></Button>
-                        </ButtonGroup>
-                    </Grid>
-                </Grid>
+                    <Button
+                        color="secondary"
+                        onClick={() => { messageDial.setShown(true) }}
+                        variant="text"><HelpOutlineIcon /></Button>
+                </Stack>
             </Grid>
             <Grid item xs={12}>
                 <>

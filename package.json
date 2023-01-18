@@ -15,7 +15,7 @@
     "@mui/material": "^5.11.4",
     "@mui/system": "^5.11.4",
     "@next/font": "^13.1.1",
-    "@prisma/client": "^4.8.1",
+    "@prisma/client": "^4.9.0",
     "@types/chromedriver": "^81.0.1",
     "@types/next": "^9.0.0",
     "@types/node": "18.11.18",

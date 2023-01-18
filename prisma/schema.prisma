@@ -7,21 +7,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Captcha {
+  id         String             @id @unique @default(cuid())
+  token      String
+  content    CatchaGeometries[]
+  rightColor Int[]
+}
+
+model CatchaGeometries {
+  id        BigInt   @id @unique @default(autoincrement())
+  pointX    Int
+  pointY    Int
+  radius    Int
+  Captcha   Captcha? @relation(fields: [captchaId], references: [id])
+  color     Int[]
+  captchaId String?
+}
+
 model Users {
-  id                String          @id @unique @default(cuid())
-  role              UserRoles       @default(user)
-  rating            Int
-  token             String          @unique
-  login             String          @unique
-  rank              Int
-  email             String          @unique
-  passwordHash      String
-  balance           Decimal
-  statusText        String
-  avatar            String
-  notifications     Notifications[]
-  accounts          AccountsStorage @relation(fields: [accountsStorageId], references: [id])
-  accountsStorageId String
+  id                  String             @id @unique @default(cuid())
+  role                UserRoles          @default(user)
+  rating              Int
+  token               String             @unique
+  login               String             @unique
+  rank                Int
+  email               String             @unique
+  emailVerified       Boolean            @default(false)
+  passwordHash        String
+  balance             Decimal
+  statusText          String
+  avatar              String
+  notifications       Notifications[]
+  accounts            AccountsStorage    @relation(fields: [accountsStorageId], references: [id])
+  accountsStorageId   String
+  threads             Thread[]
+  ThreadComment       ThreadComment[]
+  ThreadsCollection   ThreadsCollection? @relation(fields: [threadsCollectionId], references: [id])
+  threadsCollectionId String?
+}
+
+model ThreadsCollection {
+  id       String    @id @unique @default(cuid())
+  title    String
+  canWrite UserRoles @default(user)
+  canRead  UserRoles @default(user)
+  threads  Thread[]
+  admins   Users[]
+  likes    Int
+}
+
+model Thread {
+  id                  String             @id @unique @default(cuid())
+  title               String
+  description         String
+  likes               Int                @default(0)
+  ThreadsCollection   ThreadsCollection? @relation(fields: [threadsCollectionId], references: [id])
+  threadsCollectionId String?
+  userOwner           Users?             @relation(fields: [usersId], references: [id])
+  usersId             String?
+}
+
+model ThreadComment {
+  id      String @id @unique @default(cuid())
+  user    Users  @relation(fields: [usersId], references: [id])
+  usersId String
+  likes   Int
 }
 
 model Notifications {
@@ -58,7 +108,7 @@ model SteamGame {
   id                String        @id @unique @default(cuid())
   name              String
   previewAvatarLink String
-  gameStoreLink    String
+  gameStoreLink     String
   SteamAccount      SteamAccount? @relation(fields: [steamAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   steamAccountId    String?
 }
