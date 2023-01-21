@@ -7,10 +7,12 @@ import { IntlProvider } from 'react-intl';
 import { ThemeProvider } from '@emotion/react';
 import { darkThemeOptions } from '../themes/dark';
 import { Box } from '@mui/material';
-import Header from '../components/header';
-import Footer from '../components/footer';
 import React from 'react';
-import { GlobalContextWrapper } from '../components/contextes/globalcontext';
+import { GetServerSideProps } from 'next';
+import { getSession } from '../app/sessions';
+import { PrismaClient } from '@prisma/client';
+import { ThemeContextWrapper } from '../components/GlobalContexts/ThemeContext';
+import { Header } from '../app/header';
 
 const messages: { [loc: string]: { [id: string]: string } } = {
   en,
@@ -27,19 +29,12 @@ export default function App({ Component, pageProps }: AppProps) {
   })
 
   return (
-
     <IntlProvider locale={locale!} messages={messages[locale]}>
-      <GlobalContextWrapper>
-        <Box
-          sx={{
-            bgcolor: 'background.default'
-          }}>
-          <Header />
+      <ThemeContextWrapper>
+        <>
           <Component {...pageProps} />
-          <Footer />
-        </Box>
-      </GlobalContextWrapper >
-
+        </>
+      </ThemeContextWrapper>
     </IntlProvider>)
 
 }

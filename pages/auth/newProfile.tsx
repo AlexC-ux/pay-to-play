@@ -4,16 +4,13 @@ import axios from "axios";
 import { useRouter } from "next/router"
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { useIntl } from "react-intl";
-import { GlobalContext } from "../../components/contextes/globalcontext";
 import Error from "../../components/interfaces/error";
-import { IUser } from "../../components/interfaces/user";
 import { sha512, sha256 } from 'crypto-hash';
 
 
 export default function SignIn() {
     const intl = useIntl();
     const router = useRouter();
-    const globalContext = useContext(GlobalContext)!;
 
     const [error, setError]: [any, Dispatch<SetStateAction<any>>] = useState({ text: undefined });
 
@@ -36,17 +33,11 @@ export default function SignIn() {
                                 passwordHash: hash,
                                 login: regData.login
                             }).then((result) => {
-                                const responseUser: IUser = result.data;
                                 const responseError: Error = result.data;
-
-                                console.log({ responseError })
-
                                 if (!!responseError.error) {
                                     setError({ text: intl.formatMessage({ id: responseError.error }) })
                                 } else {
-                                    globalContext.user.dispatch(responseUser);
-                                    localStorage.setItem("userToken", responseUser.token)
-                                    router.push("/userprofile/me")
+                                    location.replace("/userprofile/me")
                                 }
                             })
                     })

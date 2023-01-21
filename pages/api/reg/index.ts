@@ -1,20 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Error from "../../../components/interfaces/error";
-import { IUser, UserRoles } from "../../../components/interfaces/user";
-import { sha512, sha256 } from 'crypto-hash';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Users } from '@prisma/client'
+import { getSession } from '../../../app/sessions';
+import cuid from 'cuid';
 
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<IUser | Error>) {
-    let { email, passwordHash, login }: { email: string, passwordHash: string, login: string } = req.body;
-
+export default async function CheckCredentailsApi(req: NextApiRequest, res: NextApiResponse<any | Error>) {
+    const { email, passwordHash, login }: { email: string, passwordHash: string, login: string } = req.body;
+    const session = await getSession(req, res)
+    session.touch();
     const prisma = new PrismaClient();
-
-    async function main(props: { token: string }) {
-
+    async function main() {
         await prisma.users.create({
             data: {
-                token: props.token,
+                token: `${cuid()}${cuid()}:FF${cuid()}`,
                 login: login,
                 email: email,
                 passwordHash: passwordHash,
@@ -23,51 +22,62 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
                 rating: 0,
                 rank: 0,
                 balance: 0,
+                memberSince: Date.now(),
                 notifications: {
-                    create: [{ title: "Добро пожаловать!", text: "В этом разделе будут собраны уведомления." }]
+                    create: [{ title: "Добро пожаловать!", text: "В этом разделе будут собраны уведомления.", createdAt: Date.now() }]
                 },
                 accounts: {
                     create: {}
+                },
+                BookmarkStore: {
+                    create: {}
+                },
+                threads: {
+                    create: {
+                        title: "wall",
+                        likes: 0,
+                        description: "wall",
+                        comments: {},
+                        createdAt: Date.now()
+                    }
                 }
             },
             include: {
                 notifications: true,
             }
-        }).then(newUser => {
-            const user = <unknown>newUser;
-            res.json(<IUser>user);
+        }).then(user => {
+            session.token = user.token;
+            session.cookie.expires = new Date(Date.now() + 12 * 60 * 60 * 1000);
+        }).catch(err => {
+            res.json({
+                "error": "AUTH.REGISTER.ERROR.uniqueContraintFailed",
+                "message": JSON.stringify(err)
+            })
         })
     }
-
-    verifCreds().then(isValid => {
-        if (isValid) {
-            sha512(`${email}.${passwordHash.substring(0, 4)}.${passwordHash.substring(passwordHash.length - 10, passwordHash.length - 1)}.${login}`).then(token => {
-                main({ token })
-                    .then(async () => {
-                        await prisma.$disconnect()
-                    })
-                    .catch(async (e) => {
-                        console.error(e)
-                        await prisma.$disconnect()
-                        process.exit(1)
-                    })
+    if (await verifCreds()) {
+        main()
+            .then(async () => {
+                await session.commit();
+                res.redirect("/userprofile/me")
+                await prisma.$disconnect()
             })
-        } else {
-            res.json({ "error": "AUTH.REGISTER.ERROR.nojschecks" })
-        }
-    })
+            .catch(async (e) => {
+                console.error(e)
+                await prisma.$disconnect()
+                process.exit(1)
+            })
+    }
 
 
 
 
     async function verifCreds() {
 
-        email = email.toLowerCase();
+        const mail = email.toLowerCase();
 
         if (
-            email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-            &&
-            passwordHash.length == (await sha512("123")).length
+            mail.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
             &&
             login.length > 6
         ) {
@@ -76,5 +86,4 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<IUser 
             return false
         }
     }
-
 }

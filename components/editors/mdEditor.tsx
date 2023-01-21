@@ -1,4 +1,4 @@
-import { Backdrop, Box, Button, FormControl, FormControlLabel, FormGroup, Grid, List, ListItem, Menu, MenuItem, Paper, Stack, SxProps } from "@mui/material";
+import { Backdrop, Box, Button, FormControl, FormControlLabel, FormGroup, Grid, IconButton, List, ListItem, Menu, MenuItem, Paper, Stack, SxProps, Tooltip } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import InsertLinkOutlinedIcon from '@mui/icons-material/InsertLinkOutlined';
@@ -13,16 +13,16 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import ButtonGroup from "@mui/material/ButtonGroup";
 import ShowAlertMessage from "../alerts/alertMessage";
 import { useIntl } from "react-intl";
 import React from "react";
 import DisplayMdWrapper from "./displayMdWrapper";
+import { ArrowCircleRightOutlined } from "@mui/icons-material";
 
 
 const selection = { start: 0, end: 0 };
 
-export default function MdEditor(props: { styleSx?: SxProps }) {
+export default function MdEditor(props: { rowsCount?: number, placeholder?: string, onSend: (comment: string) => void } = { rowsCount: 9, placeholder: "", onSend: () => { } }) {
 
     const [modeEdit, setModeEdit] = useState(true)
     const [content, setContent] = useState("");
@@ -37,11 +37,9 @@ export default function MdEditor(props: { styleSx?: SxProps }) {
     function handleSelection(inputElement: HTMLInputElement | HTMLTextAreaElement) {
         selection.start = inputElement.selectionStart!;
         selection.end = inputElement.selectionEnd!;
-        console.log({ selectionUpdated: selection, s: inputElement.selectionStart, e: inputElement.selectionEnd })
     }
 
     function replaceSelection(editFunc: (selectedText: string) => string) {
-        console.log({ selection })
         if (selection.start != selection.end) {
             setContent((prev) => {
                 console.log({ prev })
@@ -192,8 +190,7 @@ export default function MdEditor(props: { styleSx?: SxProps }) {
     }
     //link menu
 
-    return <Paper
-        sx={props.styleSx}>
+    return <Paper>
         <Grid container>
             <Grid item xs={12}>
                 <Stack
@@ -360,11 +357,15 @@ export default function MdEditor(props: { styleSx?: SxProps }) {
                         variant="text"><HelpOutlineIcon /></Button>
                 </Stack>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12}
+                sx={{
+                    position: "relative"
+                }}>
                 <>
                     <TextField
+                        placeholder={props.placeholder}
                         multiline={true}
-                        minRows={9}
+                        minRows={props.rowsCount}
                         contentEditable={false}
                         onChange={(tf) => { setContent(tf.target.value) }}
                         InputProps={{ value: content }}
@@ -372,16 +373,40 @@ export default function MdEditor(props: { styleSx?: SxProps }) {
                             width: "100%",
                             display: !!modeEdit ? "inheirit" : "none"
                         }}
-                        inputProps={{ onSelect: (input) => { handleSelection(input.currentTarget) } }} />
+                        inputProps={{ onSelect: (input) => { handleSelection(input.currentTarget) } }}
+                        onKeyDownCapture={(e) => {
+                            if (e.shiftKey) {
+                                if (e.key == "Enter") {
+                                    props.onSend(content);
+                                    setTimeout(() => { setContent(""); })
+                                }
+                            }
+                        }} />
                     <Typography
                         sx={{
-                            display: !modeEdit ? "inheirit" : "none",
                             p: 2,
+                            width: "100%",
+                            display: !modeEdit ? "inheirit" : "none",
                         }}>
                         <DisplayMdWrapper>{content}</DisplayMdWrapper>
                     </Typography>
                 </>
-
+                <Tooltip title="SHIFT+ENTER" placement="top">
+                    <IconButton
+                        color="secondary"
+                        onClick={() => {
+                            props.onSend(content);
+                            setContent("");
+                        }}
+                        sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            mt: "10px"
+                        }}>
+                        <ArrowCircleRightOutlined />
+                    </IconButton>
+                </Tooltip>
             </Grid>
         </Grid>
         {messageDial.element}

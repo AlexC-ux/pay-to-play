@@ -4,17 +4,17 @@ import axios from "axios";
 import { useRouter } from "next/router"
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { useIntl } from "react-intl";
-import { GlobalContext } from "../../components/contextes/globalcontext";
 import Error from "../../components/interfaces/error";
-import { IUser } from "../../components/interfaces/user";
 import { sha512, } from 'crypto-hash';
 import { stringify } from "querystring";
+import { Users } from "@prisma/client";
+import { GetServerSideProps } from "next";
+import { getSession } from "../../app/sessions";
 
 
 export default function SignIn() {
     const intl = useIntl();
     const router = useRouter();
-    const globalContext = useContext(GlobalContext)!;
 
     const [error, setError]: [any, Dispatch<SetStateAction<any>>] = useState({ text: undefined });
 
@@ -26,7 +26,7 @@ export default function SignIn() {
                 username: authData.login,
                 password: passHash
             }).then((result) => {
-                const responseUser: IUser = result.data;
+                const responseUser: Users = result.data;
                 const responseError: Error = result.data;
 
                 console.log({ responseError })
@@ -34,9 +34,7 @@ export default function SignIn() {
                 if (!!responseError.error) {
                     setError({ text: intl.formatMessage({ id: responseError.error }) })
                 } else {
-                    globalContext.user.dispatch(responseUser);
-                    localStorage.setItem("userToken", responseUser.token)
-                    router.push("/userprofile/me")
+                    location.replace("/userprofile/me")
                 }
             })
         })
@@ -109,4 +107,15 @@ export default function SignIn() {
         </>
 
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession(context.req, context.res)
+    if (!!session.token) {
+        context.res.writeHead(301, { Location: '/userprofile/me' })
+        context.res.end()
+    }
+    return {
+        props: {}
+    }
 }

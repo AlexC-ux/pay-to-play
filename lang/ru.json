@@ -15,14 +15,20 @@
     "SHOP.buy":"Купить",
     "SHOP.more":"других игр",
 
-    "AUTH.REGISTER.email":"Почта",
+
+    "PROFILE.uploadAvatar":"Загрузить аватар",
+    "PROFILE.wallTitle":"Ваша стена",
+
+    
     "AUTH.REGISTER.passwordrepeat":"Повтор пароля",
     "AUTH.REGISTER.ERROR.wrongmail":"Ошибка в адресе почты",
     "AUTH.REGISTER.ERROR.passwordsnotequal":"Пароли не совпадают",
     "AUTH.REGISTER.ERROR.passwordlength":"Пароль должен быть в длинну от 7 символов",
     "AUTH.REGISTER.ERROR.loginlength":"Логин должен быть в длинну от 7 символов",
     "AUTH.REGISTER.ERROR.nojschecks":"Клиент не произвёл валидацию.",
+    "AUTH.REGISTER.ERROR.uniqueContraintFailed":"Клиент не произвёл валидацию.",
     
+    "AUTH.REGISTER.email":"Почта",
     "AUTH.register":"Создать новый аккаунт",
     "AUTH.signin":"Войти",
     "AUTH.autherror":"Неверный логин или пароль!",
