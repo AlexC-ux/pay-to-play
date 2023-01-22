@@ -1,13 +1,9 @@
 {
     "HEADER.authbtn":"Вход",
-    "HEADER.SEARCH.placeholder":"Поиск..",
-    "HEADER.PROFILENAV.editprofile":"Редактировать профиль",
-    "HEADER.PROFILENAV.showsells":"Мои продажи",
-    "HEADER.PROFILENAV.showbuys":"Мои покупки",
-    "HEADER.PROFILENAV.exit":"Выйти из аккаунта",
-    "HEADER.MAINMENU.shop":"Покупка аккаунтов",
-    "HEADER.NOTIFICATIONS.preload":"Уведомления загружаются",
-    "HEADER.NOTIFICATIONS.nonotifications":"Уведомления отсутствуют",
+    "HEADER.NOTIFS.markAllAsRead.title":"Пометить всё как прочитанные",
+    "HEADER.NOTIFS.markAllAsRead.content":"Вы уверены, что хотите пометить все уведомления как прочитанные? Это действие нельзя будет отменить позже.",
+    "HEADER.NOTIFS.markAllAsRead.yes":"Да",
+    "HEADER.NOTIFS.markAllAsRead.no":"Нет",
 
     "INDEX.title.1":"Аккаунты на любой вкус",
     "INDEX.title.2":"Выставляйте свои аккаунты",

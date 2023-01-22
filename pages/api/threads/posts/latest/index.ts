@@ -19,6 +19,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     orderBy: {
                         createdAt: "asc"
                     },
+                    where:{
+                        NOT:{
+                            ThreadsCollection:null
+                        }
+                    },
+                    include:{
+                        _count:{
+                            select:{
+                                comments:true
+                            }
+                        },
+                        userOwner:{
+                            select:{
+                                avatar:true,
+                                login:true,
+                            }
+                        }
+                    },
                     skip: (Number(page) || 0) * 50,
                     take: 50
                 }).then(posts => {

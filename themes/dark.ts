@@ -29,11 +29,14 @@ export const darkThemeOptions: Theme = createTheme(
         default: '#1d2b2a',
         paper: '#243735',
       },
-      getContrastText(color:string) {
+      getContrastText(color: string) {
         return "grey"
       },
       warning: {
         main: '#b18137',
+      },
+      error: {
+        main: "#ff8282"
       },
       text: {
         primary: '#eaeaea',

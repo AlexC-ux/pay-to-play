@@ -38,7 +38,9 @@ export default async function CheckCredentailsApi(req: NextApiRequest, res: Next
                         likes: 0,
                         description: "wall",
                         comments: {},
-                        createdAt: Date.now()
+                        createdAt: Date.now(),
+                        ThreadsCollection: undefined,
+                        threadsCollectionId: null,
                     }
                 }
             },

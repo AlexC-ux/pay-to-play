@@ -19,11 +19,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     where: {
                         threadsCollectionId: `${collectionId}`
                     },
-                    orderBy:{
-                        createdAt:"asc"
+                    orderBy: {
+                        createdAt: "asc"
                     },
-                    skip:(Number(page) || 0) * 50,
-                    take:50
+                    include: {
+                        _count: {
+                            select: {
+                                comments: true
+                            }
+                        }
+                    },
+                    skip: (Number(page) || 0) * 50,
+                    take: 50
                 })
             }
         })

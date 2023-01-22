@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Grid, Pagination, Paper, Stack, Typography } from "@mui/material";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Thread } from "@prisma/client";
 import { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { useIntl } from "react-intl";
 import { Header } from "../../app/header";
 import { getSession } from "../../app/sessions";
 import useSWR, { preload } from "swr";
+import ThreadComponent from "../../components/threads";
 
 const fetcher: any = (url: string) => fetch(url).then((res) => res.json());
 
@@ -51,7 +52,6 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
         }
     }, [data])
 
-    console.log({ pageprops: props })
     return <>
         <Header user={props.user} />
         <Grid container
@@ -92,7 +92,17 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                 </Stack>
             </Grid>
             <Grid item xs={12} md={8}>
-
+                {data?.map((thread: Thread & {
+                    _count: {
+                        comments: number;
+                    };
+                    userOwner: {
+                        avatar: string;
+                        login: string;
+                    } | null;
+                }) => {
+                    return ThreadComponent(thread)
+                })}
             </Grid>
         </Grid>
     </>
@@ -126,7 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     where: {
                         canRead: {
                             in: user.role
-                        }
+                        },
                     },
                     include: {
                         _count: {
@@ -154,8 +164,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 process.exit(1)
             })
     } else {
+        /*
         context.res.writeHead(301, { Location: '/auth' })
-        context.res.end()
+        context.res.end()*/
     }
 
     return {

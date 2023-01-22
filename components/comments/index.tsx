@@ -5,6 +5,7 @@ import DisplayMdWrapper from "../editors/displayMdWrapper";
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import React, { useState } from "react";
+import { FormatDateToRu } from "../formatters/formatTimeToRu";
 
 export interface ICommentComponentParams extends ThreadComment {
     user: { avatar: string, login: string }
@@ -65,10 +66,7 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
                         flexWrap: "wrap",
                         alignContent: "space-around"
                     }}>
-                    {(() => {
-                        const publishDate = new Date(Number(props.createdAt));
-                        return `${publishDate.getDate() < 10 ? `0${publishDate.getDate()}` : publishDate.getDate()}.${publishDate.getMonth() + 1 < 10 ? `0${publishDate.getMonth() + 1}` : publishDate.getMonth() + 1}.${publishDate.getFullYear()} ${publishDate.getHours() < 10 ? `0${publishDate.getHours()}` : publishDate.getHours()}:${publishDate.getMinutes() < 10 ? `0${publishDate.getMinutes()}` : publishDate.getMinutes()}`
-                    })()}
+                    {FormatDateToRu(new Date(Number(props.createdAt.toString())))}
                 </Typography>
                 <Button
                     onClick={handleLike}

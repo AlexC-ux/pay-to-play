@@ -22,7 +22,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
     const [selectedPage, setSelectedPage] = useState(0)
 
-    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { refreshInterval: 100, revalidateOnReconnect:true, revalidateIfStale:true })
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { refreshInterval: 500, revalidateOnReconnect:true, revalidateIfStale:true })
 
 
 
