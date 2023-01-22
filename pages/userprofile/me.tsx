@@ -15,27 +15,27 @@ import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-let currentPage = 0;
 
 export default function MyProfilePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter();
     const intl = useIntl();
 
+    const [selectedPage, setSelectedPage] = useState(0)
 
-    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${currentPage}`, fetcher)
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { refreshInterval: 100, revalidateOnReconnect:true, revalidateIfStale:true })
+
+
 
     const [commentsElements, setCommentsElements] = useState(<></>)
     const [pagination, setPagination] = useState(<></>)
 
     async function updateComments() {
-        setTimeout(()=>{
-            mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${currentPage}`)
-        },100)
+        fetch(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`).then(mutate)
     }
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
-        currentPage = page - 1;
-        mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${currentPage}`)
+        setSelectedPage(page - 1)
+        mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
 
     useEffect(() => {
@@ -51,6 +51,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                 </>)
                 const totalComments = data[0].Thread["_count"].comments;
                 setPagination(<><Pagination
+                    page={selectedPage + 1}
                     onChange={onPageChange}
                     count={Math.ceil(totalComments / 15)}
                     color="secondary"
@@ -73,7 +74,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
     function sendComment(text: string) {
         axios.post(`/api/threads/comments/new/${props.user.threads[0].id}`, { commentText: text });
-        mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${currentPage}`)
+        mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
 
     return <>
@@ -153,6 +154,11 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                             sx={{
                                 width: "100%",
                             }}>{intl.formatMessage({ id: "PROFILE.wallTitle" })}</Typography>
+                        <>
+                            {
+                                pagination
+                            }
+                        </>
                         <>
                             {
                                 commentsElements

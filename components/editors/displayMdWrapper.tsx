@@ -40,7 +40,7 @@ export default function DisplayMdWrapper(props: { children: string }) {
                 a.split(";").map(el => {
                     return `"${el.split(":")[0]}":}`
                 })
-                return React.createElement("span", { style: convertStylesStringToObject(style[1]), key:cuid() }, <>{child[2]}</>)
+                return React.createElement("span", { style: convertStylesStringToObject(style[1]), key: cuid() }, <>{child[2]}</>)
             } else {
                 return <React.Fragment key={cuid()}>{match}</React.Fragment>
             }
@@ -51,16 +51,16 @@ export default function DisplayMdWrapper(props: { children: string }) {
         let replaced = replaceWithStyle(children)
 
         return React.createElement(node.tagName, {
-            children: replaced,
-            key:cuid()
-        })
+            key: cuid(),
+        },
+            replaced)
     }
 
     return (<React.Fragment key={cuid()}>
-        {ReactMarkdown({
-            remarkPlugins: [remarkGfm, remarkMath],
-            rehypePlugins: [rehypeMathjax],
-            components: {
+        <ReactMarkdown
+            remarkPlugins={[remarkGfm, remarkMath]}
+            rehypePlugins={[rehypeMathjax]}
+            components={{
                 p: checkCustomTags,
                 li: checkCustomTags,
                 ul: checkCustomTags,
@@ -73,9 +73,9 @@ export default function DisplayMdWrapper(props: { children: string }) {
                 strong: checkCustomTags,
                 del: checkCustomTags,
                 em: checkCustomTags,
-            },
-            children: props.children.replace("\\n","\n")
-        })}
+            }}>
+            {props.children.replace("\\n", "\n")}
+        </ReactMarkdown>
     </React.Fragment>
     )
 }

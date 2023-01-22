@@ -77,7 +77,6 @@ export default async function getWallCommentsHandler(req: NextApiRequest, res: N
                                 resultComments[index].liked = false
                             }
                         }
-
                         res.json(resultComments)
                     })
                 }

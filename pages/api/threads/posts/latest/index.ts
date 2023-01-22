@@ -1,11 +1,9 @@
 import { PrismaClient, ThreadComment, Users } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "../../../../../app/sessions";
-import Error from "../../../../../components/interfaces/error";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | any>) {
-    const { id } = req.query
-    const { commentText } = req.body
+    const { collectionId, page } = req.query
 
     const session = await getSession(req, res);
     const prisma = new PrismaClient();
@@ -17,24 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         }).then(async user => {
             if (!!user) {
-                await prisma.thread.update({
-                    where: {
-                        id: `${id}`
+                await prisma.thread.findMany({
+                    orderBy: {
+                        createdAt: "asc"
                     },
-                    data: {
-                        comments: {
-                            create: {
-                                user: {
-                                    connect:{
-                                        id:user.id
-                                    }
-                                },
-                                text: commentText,
-                                createdAt: Date.now(),
-                                likes:0,
-                            }
-                        }
-                    }
+                    skip: (Number(page) || 0) * 50,
+                    take: 50
+                }).then(posts => {
+                    res.json(posts.map(e=>{return{...e, createdAt:e.createdAt.toString()}}))
                 })
             }
         })
@@ -45,8 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         await main()
             .then(async () => {
                 await prisma.$disconnect()
-                res.statusCode = 200;
-                res.json({})
             })
             .catch(async (e) => {
                 console.error(e)

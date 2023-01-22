@@ -19,6 +19,8 @@
     "PROFILE.uploadAvatar":"Загрузить аватар",
     "PROFILE.wallTitle":"Ваша стена",
 
+    "THREADS.LIST.title":"Разделы",
+
     
     "AUTH.REGISTER.passwordrepeat":"Повтор пароля",
     "AUTH.REGISTER.ERROR.wrongmail":"Ошибка в адресе почты",

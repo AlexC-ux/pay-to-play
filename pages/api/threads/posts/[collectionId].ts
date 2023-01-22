@@ -1,11 +1,9 @@
 import { PrismaClient, ThreadComment, Users } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from "../../../../../app/sessions";
-import Error from "../../../../../components/interfaces/error";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from "../../../../app/sessions";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | any>) {
-    const { id } = req.query
-    const { commentText } = req.body
+    const { collectionId, page } = req.query
 
     const session = await getSession(req, res);
     const prisma = new PrismaClient();
@@ -17,24 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             }
         }).then(async user => {
             if (!!user) {
-                await prisma.thread.update({
+                await prisma.thread.findMany({
                     where: {
-                        id: `${id}`
+                        threadsCollectionId: `${collectionId}`
                     },
-                    data: {
-                        comments: {
-                            create: {
-                                user: {
-                                    connect:{
-                                        id:user.id
-                                    }
-                                },
-                                text: commentText,
-                                createdAt: Date.now(),
-                                likes:0,
-                            }
-                        }
-                    }
+                    orderBy:{
+                        createdAt:"asc"
+                    },
+                    skip:(Number(page) || 0) * 50,
+                    take:50
                 })
             }
         })

@@ -21,87 +21,105 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                 }
             }
         }).then(async user => {
-            console.log({ user })
             if (user != null) {
-                const liked = user.BookmarkStore.likedComments.map(m=>m.id).includes(`${id}`)
-                //если лайка нет еще
-                if (!liked) {
-                    //добавление лайка коменту и автору в суммарные
-                    await prisma.threadComment.update({
-                        where: {
-                            id: `${id}`
-                        },
-                        include: {
-                            user: true,
-                        },
-                        data: {
-                            likes: {
-                                increment: 1
-                            },
-                            user: {
-                                update: {
-                                    likesSummary: {
+                const liked = user.BookmarkStore.likedComments.map(m => m.id).includes(`${id}`)
+
+                await prisma.threadComment.findUnique({
+                    where: {
+                        id: `${id}`
+                    },
+                    include: {
+                        user: true,
+                    },
+                }).then(async thComment => {
+
+                    //если не самолайк
+                    if (thComment?.user.id != user.id) {
+                        //если лайка нет еще
+                        if (!liked) {
+                            //добавление лайка коменту и автору в суммарные
+                            prisma.threadComment.update({
+                                where: {
+                                    id: `${id}`
+                                },
+                                include: {
+                                    user: true,
+                                },
+                                data: {
+                                    likes: {
                                         increment: 1
+                                    },
+                                    user: {
+                                        update: {
+                                            likesSummary: {
+                                                increment: 1
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    })
+                            })
 
-                    //добавление в закладки лайкнувшего
-                    await prisma.bookmarkStore.update({
-                        where: {
-                            id: user.bookmarkStoreId
-                        },
-                        data: {
-                            likedComments: {
-                                connect: {
-                                    id: `${id}`,
+                            //добавление в закладки лайкнувшего
+                            prisma.bookmarkStore.update({
+                                where: {
+                                    id: user.bookmarkStoreId
+                                },
+                                data: {
+                                    likedComments: {
+                                        connect: {
+                                            id: `${id}`,
+                                        }
+                                    }
                                 }
-                            }
+                            })
                         }
-                    })
-                }
-                //если лайк уже есть
-                else {
-                    //снятие лайка коменту и у автора в суммарных
-                    await prisma.threadComment.update({
-                        where: {
-                            id: `${id}`
-                        },
-                        include: {
-                            user: true,
-                        },
-                        data: {
-                            likes: {
-                                decrement: 1
-                            },
-                            user: {
-                                update: {
-                                    likesSummary: {
+                        //если лайк уже есть
+                        else {
+                            //снятие лайка коменту и у автора в суммарных
+                            prisma.threadComment.update({
+                                where: {
+                                    id: `${id}`
+                                },
+                                include: {
+                                    user: true,
+                                },
+                                data: {
+                                    likes: {
                                         decrement: 1
+                                    },
+                                    user: {
+                                        update: {
+                                            likesSummary: {
+                                                decrement: 1
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    })
+                            })
 
 
-                    //удаление из закладок лайкнувшего
-                    await prisma.bookmarkStore.update({
-                        where: {
-                            id: user.bookmarkStoreId
-                        },
-                        data: {
-                            likedComments: {
-                                disconnect: {
-                                    id: `${id}`,
+                            //удаление из закладок лайкнувшего
+                            prisma.bookmarkStore.update({
+                                where: {
+                                    id: user.bookmarkStoreId
+                                },
+                                data: {
+                                    likedComments: {
+                                        disconnect: {
+                                            id: `${id}`,
+                                        }
+                                    }
                                 }
-                            }
+                            })
                         }
-                    })
-                }
+                    }
+                    //если самолайк
+                    else {
+                    }
+
+                })
             }
+
         })
     }
 
@@ -109,6 +127,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         await main()
             .then(async () => {
                 await prisma.$disconnect()
+                res.statusCode = 200;
                 res.json({})
             })
             .catch(async (e) => {

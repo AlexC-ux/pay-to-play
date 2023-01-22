@@ -22,6 +22,7 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
         }
     }
 
+
     return <Paper
         key={`${props.id}_${props.likes}`}
         sx={{
