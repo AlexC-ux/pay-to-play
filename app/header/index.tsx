@@ -21,9 +21,9 @@ export function Header(props: ComponentsProps) {
                 position: "relative"
             }}>
             <Toolbar
-            sx={{
-                justifyContent:"space-between",
-            }}>
+                sx={{
+                    justifyContent: "space-between",
+                }}>
                 <BurgerNav authorized={props.user != null} />
                 <Stack
                     direction={"row"}
@@ -36,7 +36,7 @@ export function Header(props: ComponentsProps) {
                                     <Button
                                         variant="outlined"
                                         color="secondary"
-                                        onClick={() => { router.push(`/userprofile/me`) }}>
+                                        href={`/${intl.locale}/userprofile/me`}>
                                         <Avatar src={props.user.avatar} />
                                         <Typography
                                             sx={{

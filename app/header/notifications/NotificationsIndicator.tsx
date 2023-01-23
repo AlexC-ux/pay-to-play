@@ -87,31 +87,6 @@ export function NotificationsIndicator() {
     const notifSWR = useSWR(`/api/user/getNotifications?page=${notifsPage - 1}`, notifsFetcher, { refreshInterval: 10000, revalidateOnReconnect: true, revalidateIfStale: true })
 
     return <>
-        <Button
-            variant="text"
-            color="secondary"
-            id="openNotifsBtn"
-            aria-controls={menuDropdownMenuopened ? 'notifsListMenu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={menuDropdownMenuopened ? 'true' : undefined}
-            sx={{
-                borderRadius: 10,
-                p: 0,
-                position: "relative",
-            }}
-            onClick={(btn) => {
-                setNotifsAnchor(btn.currentTarget)
-            }}>
-            <Badge
-                badgeContent={notifsCount}
-                color="info">
-                <NotificationsOutlinedIcon />
-            </Badge>
-        </ Button>
-
-
-
-
         <Menu
             anchorOrigin={{
                 vertical: 'top',
@@ -124,12 +99,15 @@ export function NotificationsIndicator() {
             id="notifsListMenu"
             aria-labelledby="demo-positioned-button"
             open={menuDropdownMenuopened}
-            onClose={() => { setNotifsAnchor(null) }}>
+            onClose={() => { setNotifsAnchor(null) }}
+            sx={{
+                position: "absolute"
+            }}>
             <Stack
                 sx={{
                     px: 2,
                     py: 0.5,
-                    minWidth: "350px",
+                    minWidth: "300px",
                     width: "60vw",
                     maxWidth: "750px",
                     maxHeight: "500px",
@@ -153,6 +131,27 @@ export function NotificationsIndicator() {
                 {pagination}
             </Stack>
         </Menu>
+        <Button
+            variant="text"
+            color="secondary"
+            id="openNotifsBtn"
+            aria-controls={menuDropdownMenuopened ? 'notifsListMenu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={menuDropdownMenuopened ? 'true' : undefined}
+            sx={{
+                borderRadius: 10,
+                p: 0,
+                position: "relative",
+            }}
+            onClick={(btn) => {
+                setNotifsAnchor(btn.currentTarget)
+            }}>
+            <Badge
+                badgeContent={notifsCount}
+                color="info">
+                <NotificationsOutlinedIcon />
+            </Badge>
+        </ Button>
 
         {hideNotifsAlert.element}
     </>
