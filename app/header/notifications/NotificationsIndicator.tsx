@@ -7,17 +7,32 @@ import { FormatDateToRu } from "../../../components/formatters/formatTimeToRu";
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { ShowAlertYesNoMessage } from "../../../components/alerts/alertYesNo";
 import { useIntl } from "react-intl";
+import FiberNewOutlinedIcon from '@mui/icons-material/FiberNewOutlined';
 
 
 function NotifComponent(props: Notifications) {
 
     const date = new Date(Number(props.createdAt.toString()));
-    return <Card>
+    return <Card
+    sx={{
+        borderRadius:3
+    }}>
         <Stack
             sx={{
                 p: 1
             }}>
-            <Typography>{props.title}</Typography>
+            <Badge
+                color="secondary"
+                invisible={!props.new}
+                badgeContent={<FiberNewOutlinedIcon sx={{pl:10}}/>}
+                anchorOrigin={
+                    { vertical: 'top', horizontal: 'left', }
+                }>
+                <Typography
+                    sx={{
+                        pt: props.new ? 1 : 0
+                    }}>{props.title}</Typography>
+            </Badge>
             <Typography variant="subtitle2">{props.text}</Typography>
             <Typography variant="overline">{FormatDateToRu(date)}</Typography>
         </Stack>
@@ -31,6 +46,8 @@ export function NotificationsIndicator() {
     const [notifsAnchor, setNotifsAnchor] = useState<any>(null)
 
     const [notifsCount, setNotifsCount] = useState(0)
+
+    const [newNotifsCount, setNewNotifsCount] = useState(0);
 
     const [notifications, setNotifications] = useState<Notifications[]>([])
 
@@ -61,6 +78,7 @@ export function NotificationsIndicator() {
             const result = res.json()
             result.then(result => {
                 if (Array.isArray(result) && result.length > 0) {
+                    setNewNotifsCount(result.reduce((total, x) => (x.new != false ? total + 1 : total), 0))
                     setNotifsCount(result[0].user._count.notifications)
                     setNotifications(result)
                 }
@@ -101,7 +119,7 @@ export function NotificationsIndicator() {
             open={menuDropdownMenuopened}
             onClose={() => { setNotifsAnchor(null) }}
             sx={{
-                position: "absolute"
+                position: "absolute",
             }}>
             <Stack
                 sx={{
@@ -111,7 +129,8 @@ export function NotificationsIndicator() {
                     width: "60vw",
                     maxWidth: "750px",
                     maxHeight: "500px",
-                }}>
+                }}
+                spacing={1}>
                 <Stack
                     direction={"row"}
                     justifyContent="end"
@@ -147,7 +166,7 @@ export function NotificationsIndicator() {
                 setNotifsAnchor(btn.currentTarget)
             }}>
             <Badge
-                badgeContent={notifsCount}
+                badgeContent={newNotifsCount}
                 color="info">
                 <NotificationsOutlinedIcon />
             </Badge>

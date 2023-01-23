@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { Notifications, PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from "../../../app/sessions";
 import Error from "../../../components/interfaces/error";
 
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | { completed: boolean }>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | { notifications: any[] }>) {
     const session = await getSession(req, res);
     const prisma = new PrismaClient();
     async function main() {
@@ -27,13 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     }
                 }
             }
-        })
+        }).then(e=>{res.json({notifications:e.notifications.map(e=>{return {...e,createdAt:e.createdAt.toString()}})})})
     }
 
     if (!!session.token) {
         await main()
             .then(async () => {
-                res.json({ completed: true });
                 await prisma.$disconnect()
             })
             .catch(async (e) => {

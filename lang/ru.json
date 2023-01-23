@@ -5,12 +5,6 @@
     "HEADER.NOTIFS.markAllAsRead.yes":"Да",
     "HEADER.NOTIFS.markAllAsRead.no":"Нет",
 
-    "INDEX.title.1":"Аккаунты на любой вкус",
-    "INDEX.title.2":"Выставляйте свои аккаунты",
-
-    "SHOP.buy":"Купить",
-    "SHOP.more":"других игр",
-
 
     "PROFILE.uploadAvatar":"Загрузить аватар",
     "PROFILE.wallTitle":"Ваша стена",
@@ -36,18 +30,14 @@
     "AUTH.ERROR.wrongPasswd":"Неверный логин или пароль",
     "AUTH.ERROR.wrongToken":"Токен не действителен, повторите авторизацию",
 
-    "SHOP.ADD.STEAM.title":"Продажа steam",
-    "SHOP.ADD.STEAM.accounttitle":"Заголовок карточки аккаунта",
-    "SHOP.ADD.STEAM.accounttext":"Краткое описание аккаунта",
-    "SHOP.ADD.STEAM.login":"Логин",
-    "SHOP.ADD.STEAM.password":"Пароль",
-    "SHOP.ADD.STEAM.tit1le":"Продажа steam",
-    "SHOP.ADD.STEAM.tit1231le":"Продажа steam",
-    "SHOP.ADD.STEAM.tit12312le":"Продажа steam",
-
     "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста и [математических формул](https://docs.github.com/ru/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)\n\nПримеры использования:\n\n`$\\sqrt{3x-1}+(1+x)^2$`:\n\n$\\sqrt{3x-1}+(1+x)^2$ \n\n`~~текст~~`:\n\n~~текст~~\n\nВы так же можете использовать следующую конструкцию:\n\n `[cssprop:value1;secondprop:value2;]text[endStyle]`\n\nНапример: `[color:yellow]text[endStyle]`\n\nПокажет это: [color:yellow]text[endStyle]",
     "MDEDITOR.link":"Ссылка",
     "MDEDITOR.linkLabel":"Текст ссылки",
     "MDEDITOR.image":"Ссылка на картинку",
-    "MDEDITOR.imageLabel":"Замещающий текст"
+    "MDEDITOR.imageLabel":"Замещающий текст",
+
+
+    "AVATAR.errortitle":"Ошибка при загрузке аватара",
+    "API.AVATAR.FileFormatError":"Неверный формат файла. Допустимы: jpg, jpeg, png!",
+    "API.AVATAR.FileSizeError":"Файл больше допустимых ограничений! Он не должен быть больше 100кб!"
 }

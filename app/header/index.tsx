@@ -37,7 +37,7 @@ export function Header(props: ComponentsProps) {
                                         variant="outlined"
                                         color="secondary"
                                         href={`/${intl.locale}/userprofile/me`}>
-                                        <Avatar src={props.user.avatar} />
+                                        <Avatar src={`/avatars/${props.user.avatar}`} />
                                         <Typography
                                             sx={{
                                                 display: "flex",

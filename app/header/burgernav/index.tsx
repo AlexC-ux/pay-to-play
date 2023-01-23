@@ -11,5 +11,7 @@ export default function BurgerNav(props: { authorized: boolean }) {
         >
             <MenuOutlined />
         </IconButton>
+
+        
     </>
 }

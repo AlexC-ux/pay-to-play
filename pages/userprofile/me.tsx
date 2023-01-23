@@ -1,6 +1,6 @@
 import { Avatar, Box, Container, Grid, Paper, Stack, Button, Divider, Typography, IconButton, FormGroup, Input, TextField, Skeleton, Pagination } from "@mui/material";
 import { useRouter } from "next/router"
-import { useContext, useEffect, useState } from "react";
+import { createRef, useContext, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import React from "react";
@@ -13,6 +13,7 @@ import { Header } from "../../app/header";
 import CommentsElement, { ICommentComponentParams } from "../../components/comments";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
+import ShowAlertMessage from "../../components/alerts/alertMessage";
 
 
 export default function MyProfilePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -22,6 +23,8 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
     const [selectedPage, setSelectedPage] = useState(0)
     const [commentsElements, setCommentsElements] = useState(<></>)
     const [pagination, setPagination] = useState(<></>)
+
+    const avatarUploadRef = createRef<HTMLInputElement>();
 
     async function updateComments() {
         mutate();
@@ -37,6 +40,32 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
         mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
 
+
+    const [avatarErrText, setAvatarErrText] = useState("");
+    function uploadAvatar() {
+        let formData = new FormData();
+        if (avatarUploadRef.current!.files) {
+            formData.append("avatar", avatarUploadRef.current!.files[0]);
+            axios({
+                method: "post",
+                url: "/api/user/updateProfile/setAvatar",
+                data: formData,
+            }).then(resp => {
+                if (!!resp.data.error) {
+                    setAvatarErrText(intl.formatMessage({ id: resp.data.error }))
+                    uploadAvatarErrorAlert.setShown(true);
+                } else {
+                    router.push(router.asPath)
+                }
+            })
+        }
+
+    }
+
+    const uploadAvatarErrorAlert = ShowAlertMessage({
+        title: intl.formatMessage({ id: "AVATAR.errortitle" }),
+        content: avatarErrText
+    });
 
     const fetcher = (url: string) => fetch(url).then((res) => {
         const data = res.json()
@@ -104,7 +133,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                                 justifyContent: "center",
                             }}>
                                 <Avatar
-                                    src={`${props.user?.avatar}`}
+                                    src={`/avatars/${props.user?.avatar}`}
                                     sx={{
                                         width: "min(240px, 80vw)",
                                         height: "min(240px, 80vw)"
@@ -115,7 +144,15 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                             <Button
                                 fullWidth={true}
                                 variant="contained"
-                                startIcon={<DriveFolderUploadIcon />}>
+                                startIcon={<DriveFolderUploadIcon />}
+                                onClick={() => { avatarUploadRef.current?.click(); }}>
+                                <Input
+                                    inputRef={avatarUploadRef}
+                                    type="file"
+                                    onChange={uploadAvatar}
+                                    sx={{
+                                        display: "none",
+                                    }}></Input>
                                 {intl.formatMessage({ id: "PROFILE.uploadAvatar" })}
                             </Button>
                         </Stack>
@@ -178,6 +215,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                 </Stack>
             </Grid>
         </Grid>
+        {uploadAvatarErrorAlert.element}
     </>
 }
 

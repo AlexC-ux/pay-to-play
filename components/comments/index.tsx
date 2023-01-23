@@ -31,7 +31,7 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
                 spacing={1}
                 direction={"row"}>
                 <Avatar
-                    src={props.user.avatar}></Avatar>
+                    src={`/avatars/${props.user.avatar}`}></Avatar>
                 <Typography
                     variant="subtitle1"
                     component={"div"}
