@@ -3,6 +3,7 @@ import { Box, Button, IconButton, Menu } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
+import { useIntl } from "react-intl";
 
 export default function BurgerNav(props: { authorized: boolean }) {
 
@@ -10,13 +11,19 @@ export default function BurgerNav(props: { authorized: boolean }) {
 
     const menuOpened = Boolean(menuAnchor)
 
-    function getLinks(){
+    const intl = useIntl();
+
+    function getLinks() {
 
         if (props.authorized) {
-            
-        }else{
-            return<>
-            <Button color="secondary" variant="outlined"></Button>
+            return <>
+                <Button color="secondary" variant="outlined"
+                    onClick={() => { location.assign(`/${intl.locale}/threads/main`) }}>{intl.formatMessage({ id: "BURGERNAV.threads" })}</Button>
+            </>
+        } else {
+            return <>
+                <Button color="secondary" variant="outlined"
+                    onClick={() => { location.assign(`/${intl.locale}/auth`) }}>{intl.formatMessage({ id: "HEADER.authbtn" })}</Button>
             </>
         }
     }
@@ -74,7 +81,7 @@ export default function BurgerNav(props: { authorized: boolean }) {
                         <CloseIcon />
                     </IconButton>
                 </Box>
-                {}
+                {getLinks()}
             </Stack>
         </Menu>
     </>
