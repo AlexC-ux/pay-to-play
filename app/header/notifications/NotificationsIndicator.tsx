@@ -115,7 +115,7 @@ export function NotificationsIndicator() {
         <Menu
             anchorOrigin={{
                 vertical: 'top',
-                horizontal: 'left',
+                horizontal: 'right',
             }}
             transformOrigin={{
                 vertical: 'top',

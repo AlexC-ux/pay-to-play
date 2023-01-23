@@ -14,23 +14,17 @@ import CommentsElement, { ICommentComponentParams } from "../../components/comme
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function MyProfilePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter();
     const intl = useIntl();
 
     const [selectedPage, setSelectedPage] = useState(0)
-
-    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { refreshInterval: 500, revalidateOnReconnect:true, revalidateIfStale:true })
-
-
-
     const [commentsElements, setCommentsElements] = useState(<></>)
     const [pagination, setPagination] = useState(<></>)
 
     async function updateComments() {
-        fetch(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`).then(mutate)
+        mutate();
     }
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
@@ -38,44 +32,51 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
         mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
 
-    useEffect(() => {
-        console.log({ data })
-        if (!!data && Array.isArray(data)) {
-            if (data.length > 0) {
-                setCommentsElements(<>
-                    {
-                        data?.map((el: any, index: number) => {
-                            return CommentsElement(el, updateComments, index)
-                        })
-                    }
-                </>)
-                const totalComments = data[0].Thread["_count"].comments;
-                setPagination(<><Pagination
-                    page={selectedPage + 1}
-                    onChange={onPageChange}
-                    count={Math.ceil(totalComments / 15)}
-                    color="secondary"
-                    sx={{
-                        display: "flex",
-                        justifyContent: "space-around"
-                    }}></Pagination></>)
-            } else {
-                setCommentsElements(<>
-                    {
-                        data?.map((el: any, index: number) => {
-                            return CommentsElement(el, updateComments, index)
-                        })
-                    }
-                </>)
-                setPagination(<></>)
-            }
-        }
-    }, [data])
-
     function sendComment(text: string) {
         axios.post(`/api/threads/comments/new/${props.user.threads[0].id}`, { commentText: text });
         mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
+
+
+    const fetcher = (url: string) => fetch(url).then((res) => {
+        const data = res.json()
+        data.then(data => {
+            if (!!data && Array.isArray(data)) {
+                if (data.length > 0) {
+                    setCommentsElements(<>
+                        {
+                            data?.map((el: any, index: number) => {
+                                return CommentsElement(el, updateComments, index)
+                            })
+                        }
+                    </>)
+                    const totalComments = data[0].Thread["_count"].comments;
+                    setPagination(<><Pagination
+                        page={selectedPage + 1}
+                        onChange={onPageChange}
+                        count={Math.ceil(totalComments / 15)}
+                        color="secondary"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-around"
+                        }}></Pagination></>)
+                } else {
+                    setCommentsElements(<>
+                        {
+                            data?.map((el: any, index: number) => {
+                                return CommentsElement(el, updateComments, index)
+                            })
+                        }
+                    </>)
+                    setPagination(<></>)
+                }
+            }
+        })
+        return data;
+    });
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { revalidateOnReconnect: true, revalidateIfStale: true })
+
+
 
     return <>
         <Header user={props.user} />
