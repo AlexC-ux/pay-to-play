@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         //если лайка нет еще
                         if (!liked) {
                             //добавление лайка коменту и автору в суммарные
-                            prisma.threadComment.update({
+                            await prisma.threadComment.update({
                                 where: {
                                     id: `${id}`
                                 },
@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                             })
 
                             //добавление в закладки лайкнувшего
-                            prisma.bookmarkStore.update({
+                            await prisma.bookmarkStore.update({
                                 where: {
                                     id: user.bookmarkStoreId
                                 },
@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         //если лайк уже есть
                         else {
                             //снятие лайка коменту и у автора в суммарных
-                            prisma.threadComment.update({
+                            await prisma.threadComment.update({
                                 where: {
                                     id: `${id}`
                                 },
@@ -99,7 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
 
                             //удаление из закладок лайкнувшего
-                            prisma.bookmarkStore.update({
+                            await prisma.bookmarkStore.update({
                                 where: {
                                     id: user.bookmarkStoreId
                                 },

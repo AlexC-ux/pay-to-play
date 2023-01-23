@@ -6,6 +6,7 @@ import { MenuOutlined } from "@mui/icons-material"
 import { useIntl } from "react-intl";
 import { NotificationsIndicator } from "./notifications/NotificationsIndicator";
 import { useRouter } from "next/router";
+import BurgerNav from "./burgernav";
 
 type ComponentsProps = { user: Users | null }
 
@@ -20,15 +21,7 @@ export function Header(props: ComponentsProps) {
                 position: "relative"
             }}>
             <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="open drawer"
-                    sx={{ mr: 2 }}
-                >
-                    <MenuOutlined />
-                </IconButton>
+                <BurgerNav authorized={props.user != null} />
                 <Stack
                     direction={"row"}
                     spacing={2}>
@@ -40,7 +33,7 @@ export function Header(props: ComponentsProps) {
                                     <Button
                                         variant="outlined"
                                         color="secondary"
-                                        onClick={() => { router.push(`/${intl.locale}/userprofile/me`) }}>
+                                        onClick={() => { router.push(`/userprofile/me`) }}>
                                         <Avatar src={props.user.avatar} />
                                         <Typography
                                             sx={{

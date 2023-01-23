@@ -18,6 +18,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             orderBy: {
                 createdAt: "asc",
             },
+            include: {
+                user: {
+                    select: {
+                        _count: {
+                            select: {
+                                notifications:true
+                            }
+                        }
+                    }
+                }
+            },
             skip: (Number(page) || 0) * 15,
             take: 15,
         }).then(notifs => {

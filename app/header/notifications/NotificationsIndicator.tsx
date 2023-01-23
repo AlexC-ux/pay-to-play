@@ -1,6 +1,6 @@
 import { Backdrop, Badge, Button, Card, IconButton, Menu, MenuItem, Pagination, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import { Notifications } from "@prisma/client";
 import { FormatDateToRu } from "../../../components/formatters/formatTimeToRu";
@@ -34,7 +34,7 @@ export function NotificationsIndicator() {
 
     const [notifications, setNotifications] = useState<Notifications[]>([])
 
-    const [notifsPage, setNotifsPage] = useState(0);
+    const [notifsPage, setNotifsPage] = useState(1);
 
     let menuDropdownMenuopened = Boolean(notifsAnchor);
 
@@ -60,18 +60,31 @@ export function NotificationsIndicator() {
         fetch(url).then(res => {
             const result = res.json()
             result.then(result => {
-                if (Array.isArray(result)) {
-                    setNotifsCount(result.reduce((acc, cur) => cur.new === true ? ++acc : acc, 0))
+                if (Array.isArray(result) && result.length > 0) {
+                    setNotifsCount(result[0].user._count.notifications)
                     setNotifications(result)
                 }
+
+                setNotifications(result)
             })
             return result;
         })
     }
 
-    const [notifsPagination, setNotifsPagination] = useState(<Pagination count={10} color="secondary" />);
+    const pagination = <>
+        <Pagination
+            page={notifsPage}
+            onChange={(e, page) => { setNotifsPage(page); notifSWR.mutate(); }}
+            count={Math.ceil(notifsCount / 15)}
+            color="secondary"
+            sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                py: 2,
+            }}></Pagination>
+    </>;
 
-    const notifSWR = useSWR(`/api/user/getNotifications?page=${notifsPage}`, notifsFetcher, { refreshInterval: 10000, revalidateOnReconnect: true, revalidateIfStale: true })
+    const notifSWR = useSWR(`/api/user/getNotifications?page=${notifsPage - 1}`, notifsFetcher, { refreshInterval: 10000, revalidateOnReconnect: true, revalidateIfStale: true })
 
     return <>
         <Button
@@ -137,6 +150,7 @@ export function NotificationsIndicator() {
                         return NotifComponent(notif)
                     })
                 }
+                {pagination}
             </Stack>
         </Menu>
 
