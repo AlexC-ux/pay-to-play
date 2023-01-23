@@ -1,4 +1,4 @@
-import { Backdrop, Badge, Button, Card, IconButton, Menu, MenuItem, Pagination, Paper, Stack, Typography } from "@mui/material";
+import { Backdrop, Badge, Box, Button, Card, IconButton, Menu, MenuItem, Pagination, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr"
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -8,15 +8,15 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import { ShowAlertYesNoMessage } from "../../../components/alerts/alertYesNo";
 import { useIntl } from "react-intl";
 import FiberNewOutlinedIcon from '@mui/icons-material/FiberNewOutlined';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 function NotifComponent(props: Notifications) {
 
     const date = new Date(Number(props.createdAt.toString()));
     return <Card
-    sx={{
-        borderRadius:3
-    }}>
+        sx={{
+            borderRadius: 3
+        }}>
         <Stack
             sx={{
                 p: 1
@@ -24,7 +24,7 @@ function NotifComponent(props: Notifications) {
             <Badge
                 color="secondary"
                 invisible={!props.new}
-                badgeContent={<FiberNewOutlinedIcon sx={{pl:10}}/>}
+                badgeContent={<FiberNewOutlinedIcon sx={{ pl: 10 }} />}
                 anchorOrigin={
                     { vertical: 'top', horizontal: 'left', }
                 }>
@@ -115,7 +115,7 @@ export function NotificationsIndicator() {
                 horizontal: 'center',
             }}
             id="notifsListMenu"
-            aria-labelledby="demo-positioned-button"
+            aria-labelledby="openNotifsBtn"
             open={menuDropdownMenuopened}
             onClose={() => { setNotifsAnchor(null) }}
             sx={{
@@ -131,17 +131,20 @@ export function NotificationsIndicator() {
                     maxHeight: "500px",
                 }}
                 spacing={1}>
-                <Stack
-                    direction={"row"}
-                    justifyContent="end"
+                <Box
                     sx={{
-                        py: 0.3
+                        display: "flex",
+                        justifyContent: "end"
                     }}>
                     <IconButton
                         onClick={() => {
                             hideNotifsAlert.setShown(true);
                         }}><VisibilityOffOutlinedIcon /></IconButton>
-                </Stack>
+                    <IconButton
+                        onClick={() => { setNotifsAnchor(null) }}>
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
                 {
                     notifications.map(notif => {
                         return NotifComponent(notif)
