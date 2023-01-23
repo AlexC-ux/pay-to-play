@@ -12,15 +12,11 @@ export interface ICommentComponentParams extends ThreadComment {
     liked: boolean,
 }
 
-export default function CommentsElement(props: ICommentComponentParams, dispatcher: (el: any, index: any) => void, index: number) {
+export default function CommentsElement(props: ICommentComponentParams, dispatcher: () => void, index: number) {
 
     async function handleLike() {
         await fetch(`/api/threads/comments/like/${props.id}`)
-        if (!props.liked) {
-            dispatcher({ ...props, liked: true, likes: props.likes + 1 }, index)
-        } else {
-            dispatcher({ ...props, liked: false, likes: props.likes - 1 }, index)
-        }
+        dispatcher();
     }
 
 
