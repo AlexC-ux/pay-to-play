@@ -20,7 +20,10 @@ export function Header(props: ComponentsProps) {
             sx={{
                 position: "relative"
             }}>
-            <Toolbar>
+            <Toolbar
+            sx={{
+                justifyContent:"space-between",
+            }}>
                 <BurgerNav authorized={props.user != null} />
                 <Stack
                     direction={"row"}
