@@ -6,6 +6,7 @@ import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import Error from "../../components/interfaces/error";
 import { sha512, sha256 } from 'crypto-hash';
+import { Header } from "../../app/header";
 
 
 export default function SignIn() {
@@ -52,6 +53,7 @@ export default function SignIn() {
     }
     return (
         <>
+            <Header user={null} />
             <Container>
                 <Paper
                     sx={{

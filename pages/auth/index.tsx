@@ -10,6 +10,7 @@ import { stringify } from "querystring";
 import { Users } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getSession } from "../../app/sessions";
+import { Header } from "../../app/header";
 
 
 export default function SignIn() {
@@ -42,6 +43,7 @@ export default function SignIn() {
     }
     return (
         <>
+            <Header user={null} />
             <Container>
                 <Paper
                     sx={{

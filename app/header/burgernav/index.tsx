@@ -10,6 +10,17 @@ export default function BurgerNav(props: { authorized: boolean }) {
 
     const menuOpened = Boolean(menuAnchor)
 
+    function getLinks(){
+
+        if (props.authorized) {
+            
+        }else{
+            return<>
+            <Button color="secondary" variant="outlined"></Button>
+            </>
+        }
+    }
+
     return <>
         <IconButton
             id="openNotifsBtn"
@@ -63,6 +74,7 @@ export default function BurgerNav(props: { authorized: boolean }) {
                         <CloseIcon />
                     </IconButton>
                 </Box>
+                {}
             </Stack>
         </Menu>
     </>

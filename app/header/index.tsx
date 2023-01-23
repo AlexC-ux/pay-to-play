@@ -34,7 +34,7 @@ export function Header(props: ComponentsProps) {
                                 return <>
                                     <NotificationsIndicator />
                                     <Button
-                                        variant="outlined"
+                                        variant="text"
                                         color="secondary"
                                         href={`/${intl.locale}/userprofile/me`}>
                                         <Avatar src={`/avatars/${props.user.avatar}`} />
@@ -50,7 +50,10 @@ export function Header(props: ComponentsProps) {
                             }
                             else {
                                 return <>
-                                    <Button>
+                                    <Button
+                                        color="secondary"
+                                        variant="outlined"
+                                        onClick={() => { location.assign(`/${intl.locale}/auth`) }}>
                                         {intl.formatMessage({ id: "HEADER.authbtn" })}
                                     </Button>
                                 </>
