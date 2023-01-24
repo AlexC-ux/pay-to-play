@@ -60,7 +60,7 @@ export default function DisplayMdWrapper(props: DisplayMdWrapperProps) {
 
     return (<Box key={cuid()}
     sx={{
-        maxWidth:"30vw"
+        maxWidth:"100%"
     }}>
         <ReactMarkdown
             className={style.wrapper}

@@ -63,8 +63,7 @@ export default function ThreadPosts(props: InferGetServerSidePropsType<typeof ge
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const router = useRouter();
-    const { threadCollectionId, page } = router.query;
+    const { threadCollectionId, page } = context.query;
     const session = await getSession(context.req, context.res);
     const prisma = new PrismaClient();
 

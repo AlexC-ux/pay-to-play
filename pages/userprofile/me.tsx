@@ -34,18 +34,13 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
     const avatarUploadRef = createRef<HTMLInputElement>();
 
-    async function updateComments() {
-        mutate();
-    }
-
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
         setSelectedPage(page - 1)
         mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
     }
 
     function sendComment(text: string) {
-        axios.post(`/api/threads/comments/new/${props.user.threads[0].id}`, { commentText: text });
-        mutate(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`)
+        axios.post(`/api/threads/comments/new/${props.user.threads[0].id}`, { commentText: text }).then(mutate);
     }
 
 
@@ -83,7 +78,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                     setCommentsElements(<>
                         {
                             data?.map((el: any, index: number) => {
-                                return CommentsElement(el, updateComments, index, props.user.id, props.user.threads[0].id, props.user.threads[0].usersId)
+                                return CommentsElement(el, mutate, index, props.user.id, props.user.threads[0].id, props.user.threads[0].usersId)
                             })
                         }
                     </>)

@@ -33,7 +33,7 @@ export default async function CheckCredentailsApi(req: NextApiRequest, res: Next
 
     }
 
-    main()
+    await main()
         .then(async () => {
             await session.commit();
             if (!!session.token) {

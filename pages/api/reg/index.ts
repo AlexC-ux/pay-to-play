@@ -58,7 +58,7 @@ export default async function CheckCredentailsApi(req: NextApiRequest, res: Next
         })
     }
     if (await verifCreds()) {
-        main()
+        await main()
             .then(async () => {
                 await session.commit();
                 res.redirect("/userprofile/me")
