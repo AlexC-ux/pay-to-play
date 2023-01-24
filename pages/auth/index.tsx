@@ -30,8 +30,6 @@ export default function SignIn() {
                 const responseUser: Users = result.data;
                 const responseError: Error = result.data;
 
-                console.log({ responseError })
-
                 if (!!responseError.error) {
                     setError({ text: intl.formatMessage({ id: responseError.error }) })
                 } else {

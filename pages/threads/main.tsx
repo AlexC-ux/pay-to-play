@@ -32,7 +32,6 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
     }
 
     useEffect(() => {
-        console.log({ data })
 
         if (!!data && Array.isArray(data)) {
             if (data.length > 0) {

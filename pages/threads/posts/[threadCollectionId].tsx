@@ -8,10 +8,12 @@ import { Header } from "../../../app/header";
 import { getSession } from "../../../app/sessions";
 
 
+
+
 export default function ThreadPosts(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
-    const intl = useIntl();
     const router = useRouter();
+    const intl = useIntl();
 
     return <>
         <Header user={props.user} />
@@ -61,26 +63,19 @@ export default function ThreadPosts(props: InferGetServerSidePropsType<typeof ge
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const router = useRouter();
+    const { threadCollectionId, page } = router.query;
     const session = await getSession(context.req, context.res);
     const prisma = new PrismaClient();
 
     let userObj: any = null;
+    let threadsArr: any = null;
 
 
     async function main() {
         await prisma.users.findUnique({
             where: {
                 token: session.token
-            },
-            include: {
-                threads: {
-                    where: {
-                        title: "wall"
-                    },
-                    select: {
-                        id: true,
-                    }
-                },
             }
         }).then(async user => {
             if (user == null) {
@@ -92,6 +87,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     ...user,
                     memberSince: user.memberSince.toString()
                 };
+
+                await prisma.thread.findMany({
+                    where: {
+                        threadsCollectionId: `${threadCollectionId}`,
+                    },
+                    take: 25,
+                    skip: 25 * (Number(page) || 0)
+                }).then(threads => {
+                    threadsArr = threads.map(th => { return { ...th, createdAt: th.createdAt.toString() } })
+                })
             }
         });
     }
@@ -114,7 +119,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            user: userObj
+            user: userObj,
+            threads: threadsArr,
         }
     }
 }

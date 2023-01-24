@@ -1,10 +1,12 @@
+'use-client'
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
-import remarkMath from "remark-math";
-import rehypeMathjax from "rehype-mathjax";
 import React from "react";
 import reactStringReplace from "react-string-replace";
 import cuid from "cuid";
+import style from "./styles/displayMdWrapper.module.css";
+import { Box } from "@mui/material";
 
 const convertStylesStringToObject = (stringStyles: string) => typeof stringStyles === 'string' ? stringStyles
     .split(';')
@@ -28,7 +30,7 @@ const convertStylesStringToObject = (stringStyles: string) => typeof stringStyle
 
 export interface DisplayMdWrapperProps { children: string }
 
-export default function DisplayMdWrapper(props:DisplayMdWrapperProps) {
+export default function DisplayMdWrapper(props: DisplayMdWrapperProps) {
 
     function replaceWithStyle(children: any) {
         const customColorsExpr = /(\[.*?\].*?\[endStyle\])/gm;
@@ -56,10 +58,13 @@ export default function DisplayMdWrapper(props:DisplayMdWrapperProps) {
             replaced)
     }
 
-    return (<React.Fragment key={cuid()}>
+    return (<Box key={cuid()}
+    sx={{
+        maxWidth:"30vw"
+    }}>
         <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath]}
-            rehypePlugins={[rehypeMathjax]}
+            className={style.wrapper}
+            remarkPlugins={[remarkGfm]}
             components={{
                 p: checkCustomTags,
                 li: checkCustomTags,
@@ -76,6 +81,6 @@ export default function DisplayMdWrapper(props:DisplayMdWrapperProps) {
             }}>
             {props.children}
         </ReactMarkdown>
-    </React.Fragment>
+    </Box>
     )
 }

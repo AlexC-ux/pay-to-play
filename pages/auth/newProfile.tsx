@@ -18,7 +18,6 @@ export default function SignIn() {
     const [regData, setRegData] = useState({ login: "", password1: "", password2: "", email: "" })
 
     function createNewAccount() {
-        console.log({ regData })
         if (regData.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
             if (regData.password1 == regData.password2) {
                 if (regData.password1.length < 7) {

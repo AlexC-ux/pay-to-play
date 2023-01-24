@@ -25,13 +25,12 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
     const router = useRouter();
     const intl = useIntl();
 
-    console.log(props)
 
     const [selectedPage, setSelectedPage] = useState(0)
     const [commentsElements, setCommentsElements] = useState(<></>)
     const [pagination, setPagination] = useState(<></>)
 
-    const [avatarUri, setAvatarUri] = useState(props.user.avatar)
+    const [avatarUri, setAvatarUri] = useState(props.user?.avatar)
 
     const avatarUploadRef = createRef<HTMLInputElement>();
 
@@ -84,7 +83,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                     setCommentsElements(<>
                         {
                             data?.map((el: any, index: number) => {
-                                return CommentsElement(el, updateComments, index)
+                                return CommentsElement(el, updateComments, index, props.user.id, props.user.threads[0].id, props.user.threads[0].usersId)
                             })
                         }
                     </>)
@@ -103,7 +102,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
         })
         return data;
     });
-    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { })
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, {})
 
 
 
@@ -252,7 +251,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                             }}>
                             <Box
                                 sx={{
-                                    display:"flex",
+                                    display: "flex",
                                     justifyContent: "center",
                                     alignContent: "center",
                                     flexWrap: "wrap",
@@ -263,14 +262,17 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                                 sx={{
                                     display: "flex",
                                     justifyContent: "center",
-                                    alignContent:"center",
+                                    alignContent: "center",
                                     flexWrap: "wrap",
                                 }}>{FormatDateToRu(new Date(Number(props.user.memberSince.toString())))}</Typography>
                         </Stack>
                     </Stack>
                 </Stack>
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={8}
+                sx={{
+                    maxWidth: "100%",
+                }}>
                 <Stack>
                     <Stack
                         alignContent={"center"}
@@ -333,7 +335,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     },
                     select: {
                         id: true,
-                    }
+                        usersId: true,
+                    },
+                    orderBy: {
+                        createdAt: "asc"
+                    },
+                    take: 1,
                 },
                 _count: {
                     select: {

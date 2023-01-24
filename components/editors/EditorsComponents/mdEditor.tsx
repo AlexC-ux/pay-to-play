@@ -17,7 +17,7 @@ import { useIntl } from "react-intl";
 import React from "react";
 import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import ShowAlertMessage from "../../alerts/alertMessage";
-import { DisplayMdWrapper } from "..";
+import DisplayMdWrapper from "./displayMdWrapper";
 
 
 const selection = { start: 0, end: 0 };
@@ -44,11 +44,8 @@ export default function MdEditor(props: MdEditorProps = { rowsCount: 9, placehol
     function replaceSelection(editFunc: (selectedText: string) => string) {
         if (selection.start != selection.end) {
             setContent((prev) => {
-                console.log({ prev })
                 const edited = editFunc(prev.substring(selection.start, selection.end));
-                console.log({ edited })
                 const neVal = `${prev.substring(0, selection.start)}${edited}${prev.substring(selection.end, prev.length)}`
-                console.log({ neVal })
                 return neVal
             })
         }
@@ -388,6 +385,7 @@ export default function MdEditor(props: MdEditorProps = { rowsCount: 9, placehol
                             }
                         }} />
                     <Typography
+                        component={"div"}
                         sx={{
                             p: 2,
                             width: "100%",
