@@ -106,6 +106,7 @@ export function NotificationsIndicator() {
 
     return <>
         <Menu
+        disableScrollLock={true}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -125,8 +126,8 @@ export function NotificationsIndicator() {
                 sx={{
                     px: 2,
                     py: 0.5,
-                    minWidth: "300px",
-                    width: "60vw",
+                    minWidth: "250px",
+                    width: "70vw",
                     maxWidth: "750px",
                     maxHeight: "500px",
                 }}

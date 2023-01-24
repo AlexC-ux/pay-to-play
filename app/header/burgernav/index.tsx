@@ -57,6 +57,7 @@ export default function BurgerNav(props: { authorized: boolean }) {
             id="burgernav-menu"
             aria-labelledby="openNotifsBtn"
             open={menuOpened}
+            disableScrollLock={true}
             onClose={() => { setMenuAnchor(null) }}
             sx={{
                 position: "absolute",

@@ -1,4 +1,3 @@
-import { children } from "cheerio/lib/api/traversing";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
 import remarkMath from "remark-math";
@@ -27,8 +26,9 @@ const convertStylesStringToObject = (stringStyles: string) => typeof stringStyle
         return value ? { ...acc, [camelCaseProperty]: value } : acc
     }, {}) : {}
 
-export default function DisplayMdWrapper(props: { children: string }) {
+export interface DisplayMdWrapperProps { children: string }
 
+export default function DisplayMdWrapper(props:DisplayMdWrapperProps) {
 
     function replaceWithStyle(children: any) {
         const customColorsExpr = /(\[.*?\].*?\[endStyle\])/gm;

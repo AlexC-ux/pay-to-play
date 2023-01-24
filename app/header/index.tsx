@@ -1,12 +1,9 @@
-import { PrismaClient, Users } from "@prisma/client";
-import { GetServerSideProps } from "next";
-import { getSession } from "../sessions";
 import { AppBar, Avatar, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
-import { MenuOutlined } from "@mui/icons-material"
 import { useIntl } from "react-intl";
 import { NotificationsIndicator } from "./notifications/NotificationsIndicator";
 import { useRouter } from "next/router";
 import BurgerNav from "./burgernav";
+import { Users } from "@prisma/client";
 
 type ComponentsProps = { user: Users | null }
 

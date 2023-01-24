@@ -81,6 +81,7 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                                 {
                                     props.threadsCollections?.map((collection: any) => {
                                         return <Button
+                                            key={collection.id}
                                             color="secondary"
                                             variant="outlined"
                                             onClick={() => { router.push(`/${intl.locale}/threads/posts/${collection.id}`) }}>{collection.title}</Button>

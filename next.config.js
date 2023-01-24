@@ -5,9 +5,19 @@ const nextConfig = {
     locales: ['en', 'ru'],
     defaultLocale: 'ru',
   },
-  experimental:{
-    appDir:true
+  experimental: {
+    appDir: true
   }
 }
 
-module.exports = nextConfig
+const withPlugins = require('next-compose-plugins')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: process.env.ANALYZE === 'true',
+
+})
+
+module.exports = withPlugins([
+  [withBundleAnalyzer],
+  nextConfig
+])

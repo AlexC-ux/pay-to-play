@@ -1,11 +1,11 @@
 import { Avatar, Button, Paper, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { ThreadComment, Users } from "@prisma/client";
-import DisplayMdWrapper from "../editors/displayMdWrapper";
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import React, { useState } from "react";
 import { FormatDateToRu } from "../formatters/formatTimeToRu";
+import { DisplayMdWrapper } from "../editors";
 
 export interface ICommentComponentParams extends ThreadComment {
     user: { avatar: string, login: string }
@@ -29,7 +29,10 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
             direction={"column"}>
             <Stack
                 spacing={1}
-                direction={"row"}>
+                direction={"row"}
+                sx={{
+                    minHeight:"40px"
+                }}>
                 <Avatar
                     src={`/avatars/${props.user.avatar}`}></Avatar>
                 <Typography

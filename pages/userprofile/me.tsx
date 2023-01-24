@@ -6,7 +6,7 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import React from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { ThreadComment, PrismaClient, Thread, Users, Notifications } from "@prisma/client";
-import MdEditor from "../../components/editors/mdEditor";
+import { MdEditor } from "../../components/editors";
 import useSWR, { preload } from "swr";
 import { getSession } from "../../app/sessions";
 import { Header } from "../../app/header";
@@ -14,7 +14,7 @@ import CommentsElement, { ICommentComponentParams } from "../../components/comme
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
 import ShowAlertMessage from "../../components/alerts/alertMessage";
-
+import dynamic from 'next/dynamic'
 
 export default function MyProfilePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter();
@@ -23,6 +23,8 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
     const [selectedPage, setSelectedPage] = useState(0)
     const [commentsElements, setCommentsElements] = useState(<></>)
     const [pagination, setPagination] = useState(<></>)
+
+    const [avatarUri, setAvatarUri] = useState(props.user.avatar)
 
     const avatarUploadRef = createRef<HTMLInputElement>();
 
@@ -55,7 +57,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                     setAvatarErrText(intl.formatMessage({ id: resp.data.error }))
                     uploadAvatarErrorAlert.setShown(true);
                 } else {
-                    router.push(router.asPath)
+                    setAvatarUri(resp.data.avatar)
                 }
             })
         }
@@ -133,7 +135,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                                 justifyContent: "center",
                             }}>
                                 <Avatar
-                                    src={`/avatars/${props.user?.avatar}`}
+                                    src={`/avatars/${avatarUri}`}
                                     sx={{
                                         width: "min(240px, 80vw)",
                                         height: "min(240px, 80vw)"

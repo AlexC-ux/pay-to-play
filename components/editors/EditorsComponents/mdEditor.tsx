@@ -13,16 +13,18 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import ShowAlertMessage from "../alerts/alertMessage";
 import { useIntl } from "react-intl";
 import React from "react";
 import DisplayMdWrapper from "./displayMdWrapper";
 import { ArrowCircleRightOutlined } from "@mui/icons-material";
+import ShowAlertMessage from "../../alerts/alertMessage";
 
 
 const selection = { start: 0, end: 0 };
 
-export default function MdEditor(props: { rowsCount?: number, placeholder?: string, onSend: (comment: string) => void } = { rowsCount: 9, placeholder: "", onSend: () => { } }) {
+export interface MdEditorProps { rowsCount?: number, placeholder?: string, onSend: (comment: string) => void }
+
+export default function MdEditor(props: MdEditorProps = { rowsCount: 9, placeholder: "", onSend: () => { } }) {
 
     const [modeEdit, setModeEdit] = useState(true)
     const [content, setContent] = useState("");
@@ -210,6 +212,7 @@ export default function MdEditor(props: { rowsCount?: number, placeholder?: stri
                     ><InsertLinkOutlinedIcon /></Button>
 
                     <Menu
+                        disableScrollLock={true}
                         id="link-menu"
                         anchorEl={insertLinkMenuAnchor}
                         open={insertLinkMenuAnchorOpen}
@@ -259,6 +262,7 @@ export default function MdEditor(props: { rowsCount?: number, placeholder?: stri
                         <TitleOutlinedIcon />
                     </Button>
                     <Menu
+                        disableScrollLock={true}
                         id="title-menu"
                         anchorEl={titleMenuAnchor}
                         open={titleMenuAnchorOpen}
@@ -310,6 +314,7 @@ export default function MdEditor(props: { rowsCount?: number, placeholder?: stri
                         onClick={handleInsertImageMenuAnchorClick}
                     ><ImageOutlinedIcon /></Button>
                     <Menu
+                        disableScrollLock={true}
                         id="image-menu"
                         anchorEl={insertImageMenuAnchor}
                         open={insertImageMenuAnchorOpen}
