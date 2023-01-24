@@ -6,26 +6,9 @@ import { MdEditorProps } from "./EditorsComponents/mdEditor";
 
 export function DisplayMdWrapper(props: DisplayMdWrapperProps) {
     const Wrapper = dynamic(() => import("./EditorsComponents/displayMdWrapper"), {
-        suspense: true,
+        loading: (p) => <div>{props.children.split("\n\n").map((content, index) => { return <p key={index}>{content}</p> })}</div>
     });
     return (
-        <div>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Wrapper>{props.children}</Wrapper>
-            </Suspense>
-        </div>
-    );
-}
-
-export function MdEditor(props:MdEditorProps) {
-    const Navigation:any = dynamic(() => import("./EditorsComponents/mdEditor"), {
-        suspense: true,
-    });
-    return (
-        <div>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Navigation {...props}/>
-            </Suspense>
-        </div>
+        <Wrapper>{props.children}</Wrapper>
     );
 }

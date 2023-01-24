@@ -15,9 +15,9 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useIntl } from "react-intl";
 import React from "react";
-import DisplayMdWrapper from "./displayMdWrapper";
 import { ArrowCircleRightOutlined } from "@mui/icons-material";
 import ShowAlertMessage from "../../alerts/alertMessage";
+import { DisplayMdWrapper } from "..";
 
 
 const selection = { start: 0, end: 0 };
@@ -199,7 +199,7 @@ export default function MdEditor(props: MdEditorProps = { rowsCount: 9, placehol
                     direction={"row"}
                     maxWidth="90vw"
                     flexWrap={"wrap"}
-                    justifyContent="flex-end">
+                    justifyContent="space-evenly">
                     <Button
                         id="link-button"
                         color="secondary"

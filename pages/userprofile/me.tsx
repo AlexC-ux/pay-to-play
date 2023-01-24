@@ -6,7 +6,6 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import React from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { ThreadComment, PrismaClient, Thread, Users, Notifications } from "@prisma/client";
-import { MdEditor } from "../../components/editors";
 import useSWR, { preload } from "swr";
 import { getSession } from "../../app/sessions";
 import { Header } from "../../app/header";
@@ -14,11 +13,19 @@ import CommentsElement, { ICommentComponentParams } from "../../components/comme
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
 import ShowAlertMessage from "../../components/alerts/alertMessage";
-import dynamic from 'next/dynamic'
+import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
+import { FormatDateToRu } from "../../components/formatters/formatTimeToRu";
+import MdEditor from "../../components/editors/EditorsComponents/mdEditor";
+
+
 
 export default function MyProfilePage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const router = useRouter();
     const intl = useIntl();
+
+    console.log(props)
 
     const [selectedPage, setSelectedPage] = useState(0)
     const [commentsElements, setCommentsElements] = useState(<></>)
@@ -91,21 +98,12 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                             display: "flex",
                             justifyContent: "space-around"
                         }}></Pagination></>)
-                } else {
-                    setCommentsElements(<>
-                        {
-                            data?.map((el: any, index: number) => {
-                                return CommentsElement(el, updateComments, index)
-                            })
-                        }
-                    </>)
-                    setPagination(<></>)
                 }
             }
         })
         return data;
     });
-    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { revalidateOnReconnect: true, revalidateIfStale: true })
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${props.user.threads[0].id}?page=${selectedPage}`, fetcher, { })
 
 
 
@@ -168,11 +166,106 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                         sx={{
                             p: 2
                         }}>
+                        <Grid container>
+                            <Grid item xs={12} md={4}
+                                sx={{
+                                    justifyContent: "center",
+                                    display: "flex",
+                                }}>
+                                <Stack
+                                    direction={"row"}
+                                    spacing={"space-around"}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignContent: "center",
+                                            flexWrap: "wrap",
+                                        }}>
+
+                                        <FavoriteBorderOutlined />
+                                    </Box>
+                                    <Typography variant="h5" component="div"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}>{props.user.likesSummary}</Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12} md={4}
+                                sx={{
+                                    justifyContent: "center",
+                                    display: "flex",
+                                }}>
+                                <Stack
+                                    direction={"row"}
+                                    spacing={"space-around"}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignContent: "center",
+                                            flexWrap: "wrap",
+                                        }}>
+
+                                        <SubjectOutlinedIcon />
+                                    </Box>
+                                    <Typography variant="h5" component="div"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}>{props.user._count.threads}</Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12} md={4}
+                                sx={{
+                                    justifyContent: "center",
+                                    display: "flex",
+                                }}>
+                                <Stack
+                                    direction={"row"}
+                                    spacing={"space-around"}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignContent: "center",
+                                            flexWrap: "wrap",
+                                        }}>
+
+                                        <ChatOutlinedIcon />
+                                    </Box>
+                                    <Typography variant="h5" component="div"
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}>{props.user._count.ThreadComment}</Typography>
+                                </Stack>
+                            </Grid>
+                        </Grid>
                         <Stack
                             direction={"row"}
-                            spacing={"space-around"}>
-                            <FavoriteBorderOutlined />
-                            <Typography variant="h5" component="div">{props.user.likesSummary}</Typography>
+                            sx={{
+                                justifyContent: "center",
+                                alignContent: "center",
+                                flexWrap: "wrap",
+                            }}>
+                            <Box
+                                sx={{
+                                    display:"flex",
+                                    justifyContent: "center",
+                                    alignContent: "center",
+                                    flexWrap: "wrap",
+                                }}>
+                                <TodayOutlinedIcon />
+                            </Box>
+                            <Typography variant="h5" component="div"
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignContent:"center",
+                                    flexWrap: "wrap",
+                                }}>{FormatDateToRu(new Date(Number(props.user.memberSince.toString())))}</Typography>
                         </Stack>
                     </Stack>
                 </Stack>
@@ -240,6 +333,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     },
                     select: {
                         id: true,
+                    }
+                },
+                _count: {
+                    select: {
+                        threads: true,
+                        ThreadComment: true
                     }
                 }
             }

@@ -74,7 +74,7 @@ export default function DisplayMdWrapper(props:DisplayMdWrapperProps) {
                 del: checkCustomTags,
                 em: checkCustomTags,
             }}>
-            {props.children.replace("\\n", "\n")}
+            {props.children}
         </ReactMarkdown>
     </React.Fragment>
     )

@@ -1,12 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
 import styles from '../styles/index/indexpage.module.css';
 import { useIntl } from 'react-intl'
 import React from 'react'
 import { Box, Container, Paper, Typography, useTheme } from '@mui/material'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export default function Home(props:{user:number}) {
 

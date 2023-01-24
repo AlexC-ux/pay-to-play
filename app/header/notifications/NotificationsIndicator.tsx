@@ -14,6 +14,7 @@ function NotifComponent(props: Notifications) {
 
     const date = new Date(Number(props.createdAt.toString()));
     return <Card
+        key={props.id}
         sx={{
             borderRadius: 3
         }}>
@@ -106,7 +107,7 @@ export function NotificationsIndicator() {
 
     return <>
         <Menu
-        disableScrollLock={true}
+            disableScrollLock={true}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
@@ -127,7 +128,7 @@ export function NotificationsIndicator() {
                     px: 2,
                     py: 0.5,
                     minWidth: "250px",
-                    width: "70vw",
+                    width:"50vw",
                     maxWidth: "750px",
                     maxHeight: "500px",
                 }}
