@@ -15,12 +15,10 @@ export default function ThreadComponent(props: Thread & {
     } | null;
 }) {
 
-    const router = useRouter();
-    const intl = useIntl();
-
 
     return <>
         <Stack
+            key={props.id}
             component={Paper}
             spacing={1}
             sx={{
@@ -28,10 +26,10 @@ export default function ThreadComponent(props: Thread & {
             }}>
             <Typography
                 variant="subtitle1"
-                onClick={()=>{}}
+                onClick={() => { }}
                 sx={{
                     width: "100%",
-                    cursor:"pointer",
+                    cursor: "pointer",
                 }}>
                 {props.title}
             </Typography>
@@ -41,7 +39,7 @@ export default function ThreadComponent(props: Thread & {
                 <Stack
                     spacing={0}
                     direction="row"
-                    >
+                >
                     <Avatar src={props.userOwner?.avatar}></Avatar>
                     <Typography
                         sx={{

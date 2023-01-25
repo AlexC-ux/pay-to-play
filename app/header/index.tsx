@@ -14,6 +14,7 @@ export function Header(props: ComponentsProps) {
 
     return <>
         <AppBar
+            key={props.user?.id || "header_main"}
             sx={{
                 position: "relative"
             }}>

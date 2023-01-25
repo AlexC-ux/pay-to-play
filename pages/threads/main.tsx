@@ -9,51 +9,53 @@ import { getSession } from "../../app/sessions";
 import useSWR, { preload } from "swr";
 import ThreadComponent from "../../components/threads";
 
-const fetcher: any = (url: string) => fetch(url).then((res) => res.json());
 
-let selectedThreadCollectionPath = "latest";
 
 export default function Threads(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     const intl = useIntl();
     const router = useRouter();
 
-    const [selectedPage, setSelectedPage] = useState(0)
+    const [selectedPage, setSelectedPage] = useState(1)
 
-    const { threadCollectionId } = router.query;
+    const [pagination, setPagination] = useState(<div key="pag_01292"></div>);
 
-    const { data, error, mutate } = useSWR(`/api/threads/posts/latest?page=0`, fetcher, { refreshInterval: 10000, revalidateOnReconnect: true, revalidateIfStale: true });
+    const [threads, setThreads] = useState<any[]>([]);
 
-    const [pagination, setPagination] = useState(<></>);
+    const [collectionId, setCollectionId] = useState("latest")
 
-    function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
-        setSelectedPage(page - 1)
-        mutate(`/api/threads/posts/${selectedThreadCollectionPath}?page=${selectedPage}`)
-    }
 
-    useEffect(() => {
-
+    const fetcher: any = (url: string) => fetch(url).then(async (res) => {
+        const data: any = await res.json()
         if (!!data && Array.isArray(data)) {
             if (data.length > 0) {
-                const totalThreads = 0;
-                setPagination(<><Pagination
-                    page={selectedPage + 1}
-                    onChange={onPageChange}
-                    count={Math.ceil(totalThreads / 50)}
-                    color="secondary"
-                    sx={{
-                        display: "flex",
-                        justifyContent: "space-around"
-                    }}></Pagination></>)
+                setThreads(data.map((thread: Thread & {
+                    _count: {
+                        comments: number;
+                    };
+                    userOwner: {
+                        avatar: string;
+                        login: string;
+                    } | null;
+                }) => <div key={thread.id + "_wrp"}>{ThreadComponent(thread)}</div>
+                ))
             } else {
-                setPagination(<></>)
             }
         }
-    }, [data])
+        return data;
+    });
+
+    const { data, error, mutate } = useSWR(`/api/threads/posts/${collectionId}?page=${selectedPage - 1}`, fetcher);
+
+    function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
+        setSelectedPage(page);
+        mutate();
+    }
 
     return <>
         <Header user={props.user} />
         <Grid container
+            key="grid.main"
             spacing={2}
             sx={{
                 p: 2
@@ -83,7 +85,7 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                                             key={collection.id}
                                             color="secondary"
                                             variant="outlined"
-                                            onClick={() => { router.push(`/${intl.locale}/threads/posts/${collection.id}`) }}>{collection.title}</Button>
+                                            onClick={() => { setCollectionId(`${collection.id}`); }}>{collection.title}</Button>
                                     })
                                 }
                             </ButtonGroup>
@@ -92,17 +94,8 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                 </Stack>
             </Grid>
             <Grid item xs={12} md={8}>
-                {data?.map((thread: Thread & {
-                    _count: {
-                        comments: number;
-                    };
-                    userOwner: {
-                        avatar: string;
-                        login: string;
-                    } | null;
-                }) => {
-                    return ThreadComponent(thread)
-                })}
+                {threads}
+                {pagination}
             </Grid>
         </Grid>
     </>
@@ -164,9 +157,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 process.exit(1)
             })
     } else {
-        /*
+
         context.res.writeHead(301, { Location: '/auth' })
-        context.res.end()*/
+        context.res.end()
     }
 
     return {

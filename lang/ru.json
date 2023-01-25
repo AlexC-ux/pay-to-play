@@ -32,7 +32,7 @@
     "AUTH.ERROR.wrongPasswd":"Неверный логин или пароль",
     "AUTH.ERROR.wrongToken":"Токен не действителен, повторите авторизацию",
 
-    "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста \n\n`~~текст~~`:\n\n~~текст~~\n\nВы так же можете использовать следующую конструкцию:\n\n `[cssprop:value1;secondprop:value2;]text[endStyle]`\n\nНапример: `[color:yellow]text[endStyle]`\n\nПокажет это: [color:yellow]text[endStyle]",
+    "MDEDITOR.info":"Вы можете использовать `синтаксис markdown`, используемый [GitHub](https://docs.github.com/ru/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) для форматирования текста \n\n`~~текст~~`:\n\n~~текст~~",
     "MDEDITOR.link":"Ссылка",
     "MDEDITOR.linkLabel":"Текст ссылки",
     "MDEDITOR.image":"Ссылка на картинку",

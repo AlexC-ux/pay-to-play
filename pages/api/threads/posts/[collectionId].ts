@@ -23,6 +23,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                         createdAt: "asc"
                     },
                     include: {
+                        userOwner: {
+                            select: {
+                                login: true,
+                            }
+                        },
                         _count: {
                             select: {
                                 comments: true
@@ -31,7 +36,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     },
                     skip: (Number(page) || 0) * 50,
                     take: 50
-                })
+                }).then(
+                    threads => {
+                        res.json(
+                            threads.map(t => { return { ...t, createdAt: t.createdAt.toString() } })
+                        )
+                    }
+                )
             }
         })
 
@@ -41,8 +52,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         await main()
             .then(async () => {
                 await prisma.$disconnect()
-                res.statusCode = 200;
-                res.json({})
             })
             .catch(async (e) => {
                 console.error(e)
