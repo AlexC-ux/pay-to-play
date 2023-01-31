@@ -37,7 +37,7 @@ export default function SignIn() {
                                 if (!!responseError.error) {
                                     setError({ text: intl.formatMessage({ id: responseError.error }) })
                                 } else {
-                                    location.replace("/userprofile/me")
+                                    router.replace("/userprofile/me")
                                 }
                             })
                     })

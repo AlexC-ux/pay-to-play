@@ -8,6 +8,7 @@ import { Header } from "../../app/header";
 import { getSession } from "../../app/sessions";
 import useSWR, { preload } from "swr";
 import ThreadComponent from "../../components/threads";
+import PlaylistAddOutlinedIcon from '@mui/icons-material/PlaylistAddOutlined';
 
 
 
@@ -55,7 +56,6 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
     return <>
         <Header user={props.user} />
         <Grid container
-            key="grid.main"
             spacing={2}
             sx={{
                 p: 2
@@ -79,6 +79,12 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                             </Typography>
                             <ButtonGroup
                                 orientation="vertical">
+                                <Button
+                                    color="secondary"
+                                    variant="outlined"
+                                    onClick={() => { router.replace("/threads/new") }}>
+                                    <PlaylistAddOutlinedIcon />
+                                </Button>
                                 {
                                     props.threadsCollections?.map((collection: any) => {
                                         return <Button
@@ -94,8 +100,11 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                 </Stack>
             </Grid>
             <Grid item xs={12} md={8}>
-                {threads}
-                {pagination}
+                <Stack
+                spacing={1}>
+                    {threads}
+                    {pagination}
+                </Stack>
             </Grid>
         </Grid>
     </>

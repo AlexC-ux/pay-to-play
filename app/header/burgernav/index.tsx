@@ -4,10 +4,12 @@ import { Stack } from "@mui/system";
 import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { useIntl } from "react-intl";
+import { useRouter } from "next/dist/client/router";
 
 export default function BurgerNav(props: { authorized: boolean }) {
 
     const [menuAnchor, setMenuAnchor] = useState<any>(null)
+    const router = useRouter();
 
     const menuOpened = Boolean(menuAnchor)
 
@@ -18,12 +20,12 @@ export default function BurgerNav(props: { authorized: boolean }) {
         if (props.authorized) {
             return <>
                 <Button color="secondary" variant="outlined"
-                    onClick={() => { location.assign(`/${intl.locale}/threads/main`) }}>{intl.formatMessage({ id: "BURGERNAV.threads" })}</Button>
+                    onClick={() => { router.replace(`/${intl.locale}/threads/main`) }}>{intl.formatMessage({ id: "BURGERNAV.threads" })}</Button>
             </>
         } else {
             return <>
                 <Button color="secondary" variant="outlined"
-                    onClick={() => { location.assign(`/${intl.locale}/auth`) }}>{intl.formatMessage({ id: "HEADER.authbtn" })}</Button>
+                    onClick={() => { router.replace(`/${intl.locale}/auth`) }}>{intl.formatMessage({ id: "HEADER.authbtn" })}</Button>
             </>
         }
     }

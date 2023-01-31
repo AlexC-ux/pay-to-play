@@ -51,7 +51,7 @@ export function Header(props: ComponentsProps) {
                                     <Button
                                         color="secondary"
                                         variant="outlined"
-                                        onClick={() => { location.assign(`/${intl.locale}/auth`) }}>
+                                        onClick={() => { router.replace(`/${intl.locale}/auth`) }}>
                                         {intl.formatMessage({ id: "HEADER.authbtn" })}
                                     </Button>
                                 </>

@@ -148,9 +148,9 @@ export function NotificationsIndicator() {
                     </IconButton>
                 </Box>
                 {
-                    notifications.map(notif => {
+                    !!notifications&&Array.isArray(notifications)?notifications.map(notif => {
                         return NotifComponent(notif)
-                    })
+                    }):<></>
                 }
                 {pagination}
             </Stack>
