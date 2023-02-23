@@ -13,6 +13,13 @@
 
     "THREADS.LIST.title":"Разделы",
 
+
+    "THREADS.NEW.setTitle":"Заголовок темы",
+    "THREADS.NEW.setTitle.placeholder":"Введите заголовок темы",
+    "THREADS.NEW.setThreadCollection":"Раздел размещения",
+    "THREADS.NEW.setContent":"Заполните содержимое",
+
+
     
     "AUTH.REGISTER.passwordrepeat":"Повтор пароля",
     "AUTH.REGISTER.ERROR.wrongmail":"Ошибка в адресе почты",

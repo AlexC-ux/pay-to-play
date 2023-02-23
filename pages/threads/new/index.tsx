@@ -1,6 +1,10 @@
-import { Stack } from "@mui/material";
-import { PrismaClient } from "@prisma/client";
+import { Grid, Input, MenuItem, Select, SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { PrismaClient, ThreadsCollection } from "@prisma/client";
+import axios from "axios";
 import { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import React from "react";
+import { useState } from "react";
+import { useIntl } from "react-intl";
 import { Header } from "../../../app/header";
 import { getSession } from "../../../app/sessions";
 import MdEditor from "../../../components/editors/EditorsComponents/mdEditor";
@@ -10,17 +14,55 @@ import MdEditor from "../../../components/editors/EditorsComponents/mdEditor";
 
 export default function Threads(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
-    function sendForm() {
+    const intl = useIntl();
 
+    const titleRef = React.createRef<HTMLInputElement>();
+
+    const threadsCollections: ThreadsCollection[] = props.threadsCollections;
+
+    const [selectedThread, setSelectedThread] = useState("")
+
+    function sendForm(content: string) {
+        const collectionId = selectedThread;
+        const title = titleRef.current!.value;
+
+        axios.post("/api/threads/posts/create", {
+            title,
+            collectionId,
+            content: content
+        }).then(response=>{
+            const viewId = response.data.createdPostId;
+            document.location.replace(`/threads/view/${viewId}`);
+        })
     }
 
-    
     return <>
         <Header user={props.user} />
-        <Stack
-            spacing={1}>
-            <MdEditor rowsCount={8} placeholder={""} onSend={sendForm} />
-        </Stack>
+        <Grid container
+            spacing={2}
+            sx={{
+                p: 2
+            }}>
+            <Grid item xs={12}>
+                <Stack
+                    spacing={1}>
+                    <Typography variant="h5" component="div">{intl.formatMessage({ id: "THREADS.NEW.setTitle" })}</Typography>
+                    <Input inputRef={titleRef} placeholder={intl.formatMessage({ id: "THREADS.NEW.setTitle.placeholder" })}></Input>
+                    <Typography variant="h5" component="div">{intl.formatMessage({ id: "THREADS.NEW.setThreadCollection" })}</Typography>
+                    <Select
+                        value={selectedThread}
+                        onChange={(e: SelectChangeEvent) => { setSelectedThread(e.target.value) }}>
+                        {threadsCollections.map((collection, index, array) => {
+                            return <MenuItem key={`list_item_${collection.id}`} value={collection.id}>{collection.title}</MenuItem>
+                        })}
+                    </Select>
+                    <Typography variant="h5" component="div">{intl.formatMessage({ id: "THREADS.NEW.setContent" })}</Typography>
+                    <MdEditor rowsCount={8} placeholder={"Содержимое вашей темы"} onSend={sendForm} />
+                </Stack>
+            </Grid>
+
+        </Grid>
+
     </>
 }
 
@@ -50,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
                 await prisma.threadsCollection.findMany({
                     where: {
-                        canRead: {
+                        canWrite: {
                             in: user.role
                         },
                     },
