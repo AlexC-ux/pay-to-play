@@ -35,7 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                             }
                         }
                     }
-                }).then(th=>{
+                }).then(async th=>{
+                    if (th.usersId!=session.token) {
+                        await prisma.notifications.create({
+                            data:{
+                                createdAt:Date.now(),
+                                title:"Новый комментарий",
+                                text:`Пользователь ${user.login} оставил Вам новый комментарий ${th.title!="wall"?`под Вашей публикацией "${th.title}"`:"у Вас на стене!"}`,
+                                userId:`${th.usersId}`,
+                            }
+                        })
+                    }
                     return null;
                 })
             }

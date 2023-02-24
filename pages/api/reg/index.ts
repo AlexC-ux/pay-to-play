@@ -47,9 +47,11 @@ export default async function CheckCredentailsApi(req: NextApiRequest, res: Next
             include: {
                 notifications: true,
             }
-        }).then(user => {
+        }).then(async user => {
             session.token = user.token;
             session.cookie.expires = new Date(Date.now() + 12 * 60 * 60 * 1000);
+            await session.commit();
+            res.redirect("/userprofile/me")
         }).catch(err => {
             res.json({
                 "error": "AUTH.REGISTER.ERROR.uniqueContraintFailed",
@@ -60,8 +62,6 @@ export default async function CheckCredentailsApi(req: NextApiRequest, res: Next
     if (await verifCreds()) {
         await main()
             .then(async () => {
-                await session.commit();
-                res.redirect("/userprofile/me")
                 await prisma.$disconnect()
             })
             .catch(async (e) => {

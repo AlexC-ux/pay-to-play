@@ -353,13 +353,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                         ...userProfile,
                         memberSince: userProfile?.memberSince.toString()
                     }
+                    if (currentProfile?.id == userObj?.id) {
+                        context.res.writeHead(301, { Location: `/${context.locale}/userprofile/me` })
+                        context.res.end()
+                    }
                 })
 
             }
         });
     }
-
-
 
     if (!!session.token) {
         await getUser().then(async () => {
