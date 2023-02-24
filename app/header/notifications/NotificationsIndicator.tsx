@@ -16,7 +16,10 @@ function NotifComponent(props: Notifications) {
     return <Card
         key={props.id}
         sx={{
-            borderRadius: 3
+            borderRadius: 3,
+            display: "block",
+            my: 1,
+            mx: 0.5,
         }}>
         <Stack
             sx={{
@@ -122,13 +125,16 @@ export function NotificationsIndicator() {
             onClose={() => { setNotifsAnchor(null) }}
             sx={{
                 position: "absolute",
+                div:{
+                    right:"2px"
+                }
             }}>
             <Stack
                 sx={{
                     px: 2,
                     py: 0.5,
                     minWidth: "250px",
-                    width:"50vw",
+                    width: "50vw",
                     maxWidth: "750px",
                     maxHeight: "500px",
                 }}
@@ -147,11 +153,16 @@ export function NotificationsIndicator() {
                         <CloseIcon />
                     </IconButton>
                 </Box>
-                {
-                    !!notifications&&Array.isArray(notifications)?notifications.map(notif => {
-                        return NotifComponent(notif)
-                    }):<></>
-                }
+                <div
+                    style={{
+                        overflowY: "scroll",
+                    }}>
+                    {
+                        !!notifications && Array.isArray(notifications) ? notifications.map(notif => {
+                            return NotifComponent(notif)
+                        }) : <></>
+                    }
+                </div>
                 {pagination}
             </Stack>
         </Menu>
