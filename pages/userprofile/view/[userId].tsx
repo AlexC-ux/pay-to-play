@@ -7,17 +7,17 @@ import React from "react";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { ThreadComment, PrismaClient, Thread, Users, Notifications } from "@prisma/client";
 import useSWR, { preload } from "swr";
-import { getSession } from "../../app/sessions";
-import { Header } from "../../app/header";
-import CommentsElement, { ICommentComponentParams } from "../../components/comments";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import axios from "axios";
-import ShowAlertMessage from "../../components/alerts/alertMessage";
-import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
+import { Header } from "../../../app/header";
+import { getSession } from "../../../app/sessions";
+import ShowAlertMessage from "../../../components/alerts/alertMessage";
+import CommentsElement from "../../../components/comments";
+import MdEditor from "../../../components/editors/EditorsComponents/mdEditor";
+import { FormatDateToRu } from "../../../components/formatters/formatTimeToRu";
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import SubjectOutlinedIcon from '@mui/icons-material/SubjectOutlined';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
-import { FormatDateToRu } from "../../components/formatters/formatTimeToRu";
-import MdEditor from "../../components/editors/EditorsComponents/mdEditor";
 
 
 
@@ -102,7 +102,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
 
     return <>
-        <Header user={props.user} />
+        <Header user={props.currentProfile} />
         <Grid container
             spacing={2}
             sx={{
@@ -135,20 +135,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
                             </Box>
 
-                            <Button
-                                fullWidth={true}
-                                variant="contained"
-                                startIcon={<DriveFolderUploadIcon />}
-                                onClick={() => { avatarUploadRef.current?.click(); }}>
-                                <Input
-                                    inputRef={avatarUploadRef}
-                                    type="file"
-                                    onChange={uploadAvatar}
-                                    sx={{
-                                        display: "none",
-                                    }}></Input>
-                                {intl.formatMessage({ id: "PROFILE.uploadAvatar" })}
-                            </Button>
+                            <Typography variant="h4" component={"div"} align="center">{props.user.login}</Typography>
                         </Stack>
                     </Paper>
 
@@ -310,16 +297,21 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+
+    const { userId } = context.query
+
     const session = await getSession(context.req, context.res);
     const prisma = new PrismaClient();
 
     let userObj: any = null;
 
+    let currentProfile: any = null;
+
 
     async function getUser() {
         await prisma.users.findUnique({
             where: {
-                token: session.token
+                id: `${userId}`
             },
             include: {
                 threads: {
@@ -342,16 +334,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     }
                 }
             }
-        }).then(user => {
+        }).then(async user => {
             if (user == null) {
-                session.destroy();
-                context.res.writeHead(301, { Location: '/auth' })
+                context.res.writeHead(301, { Location: `/${context.locale}/userprofile/me` })
                 context.res.end()
             } else {
                 userObj = {
                     ...user,
                     memberSince: user.memberSince.toString()
                 };
+
+                await prisma.users.findUnique({
+                    where: {
+                        token: session.token,
+                    }
+                }).then(userProfile => {
+                    currentProfile = {
+                        ...userProfile,
+                        memberSince: userProfile?.memberSince.toString()
+                    }
+                })
+
             }
         });
     }
@@ -374,7 +377,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            user: userObj
+            user: userObj,
+            currentProfile
         }
     }
 }

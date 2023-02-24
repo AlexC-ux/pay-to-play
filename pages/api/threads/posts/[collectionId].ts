@@ -4,7 +4,6 @@ import { getSession } from "../../../../app/sessions";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | any>) {
     const { collectionId, page } = req.query
-
     const session = await getSession(req, res);
     const prisma = new PrismaClient();
     async function main() {
@@ -16,30 +15,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         }).then(async user => {
             if (!!user) {
                 await prisma.thread.findMany({
-                    where: {
+                    where: collectionId != "latest" ? {
                         threadsCollectionId: `${collectionId}`
-                    },
+                    } : { threadsCollectionId: { not: null } },
                     orderBy: {
-                        createdAt: "asc"
+                        createdAt: "desc"
                     },
                     include: {
                         userOwner: {
                             select: {
                                 login: true,
+                                avatar: true,
                             }
                         },
                         _count: {
                             select: {
-                                comments: true
+                                comments: true,
                             }
                         }
                     },
-                    skip: (Number(page) || 0) * 50,
-                    take: 50
+                    skip: (Number(page) || 0) * 10,
+                    take: 10
                 }).then(
-                    threads => {
+                    async threads => {
+                        const threadsTotal: number = await prisma.thread.count({
+                            where: collectionId != "latest" ? {
+                                threadsCollectionId: `${collectionId}`
+                            } : { threadsCollectionId: { not: null } },
+                        })
                         res.json(
-                            threads.map(t => { return { ...t, createdAt: t.createdAt.toString() } })
+                            { threads: threads.map(t => { return { ...t, createdAt: t.createdAt.toString() } }), threadsTotal }
                         )
                     }
                 )

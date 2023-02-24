@@ -15,7 +15,6 @@ export default function ThreadComponent(props: Thread & {
     } | null;
 }) {
 
-
     return <>
         <Stack
             key={props.id}
@@ -26,7 +25,7 @@ export default function ThreadComponent(props: Thread & {
             }}>
             <Typography
                 variant="subtitle1"
-                onClick={() => { }}
+                onClick={() => { document.location.assign(`/threads/view/${props.id}`) }}
                 sx={{
                     width: "100%",
                     cursor: "pointer",
@@ -40,7 +39,7 @@ export default function ThreadComponent(props: Thread & {
                     spacing={0}
                     direction="row"
                 >
-                    <Avatar src={props.userOwner?.avatar}></Avatar>
+                    <Avatar src={`/avatars/${props.userOwner?.avatar}`}></Avatar>
                     <Typography
                         sx={{
                             pl: 2,

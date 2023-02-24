@@ -7,7 +7,8 @@ const nextConfig = {
   },
   experimental: {
     appDir: true
-  }
+  },
+  productionBrowserSourceMaps:false,
 }
 
 const withPlugins = require('next-compose-plugins')

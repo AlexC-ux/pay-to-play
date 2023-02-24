@@ -1,29 +1,78 @@
-import { Avatar, Button, Grid, Paper, Typography } from "@mui/material";
+import { Avatar, Button, Grid, Pagination, Paper, Stack, Typography } from "@mui/material";
 import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useState } from "react";
+import { useIntl } from "react-intl";
 import { Header } from "../../../app/header";
 import { getSession } from "../../../app/sessions";
+import CommentsElement from "../../../components/comments";
 import DisplayMdWrapper from "../../../components/editors/EditorsComponents/displayMdWrapper";
+import MdEditor from "../../../components/editors/EditorsComponents/mdEditor";
+import useSWR, { preload } from "swr";
 
 export default function PostView(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     const postInfo = props.post
+    const intl = useIntl();
+    const [pagination, setPagination] = useState(<></>)
+    const [commentsElements, setCommentsElements] = useState(<></>)
+
+    function sendComment(text: string) {
+        axios.post(`/api/threads/comments/new/${postInfo.id}`, { commentText: text }).then(mutate);
+    }
+
+    function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
+        setSelectedPage(page - 1)
+        mutate(`/api/threads/comments/getComments/${postInfo.id}?page=${selectedPage}`)
+    }
+
+    const [selectedPage, setSelectedPage] = useState(0)
+
+    const fetcher = (url: string) => fetch(url).then((res) => {
+        const data = res.json()
+        data.then(data => {
+            if (!!data && Array.isArray(data)) {
+                if (data.length > 0) {
+                    setCommentsElements(<>
+                        {
+                            data?.map((el: any, index: number) => {
+                                return CommentsElement(el, mutate, index, props.user.id, postInfo.id, postInfo.userOwner.Id)
+                            })
+                        }
+                    </>)
+                    const totalComments = data[0].Thread["_count"].comments;
+                    setPagination(<><Pagination
+                        page={selectedPage + 1}
+                        onChange={onPageChange}
+                        count={Math.ceil(totalComments / 15)}
+                        color="secondary"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-around"
+                        }}></Pagination></>)
+                }
+            }
+        })
+        return data;
+    });
+    const { data, error, mutate } = useSWR(`/api/threads/comments/getComments/${postInfo.id}?page=${selectedPage}`, fetcher, {})
 
     return <>
         <Header user={props.user} />
 
         <Typography variant="h5" component={"div"}
-        sx={{
-            m:2,
-            p:2,
-        }}>/ {postInfo.ThreadsCollection.title} /</Typography>
+            sx={{
+                m: 2,
+                p: 2,
+            }}>/ {postInfo.ThreadsCollection.title} /</Typography>
         <Paper
             sx={{
                 m: 2,
                 p: 2,
                 w: "100%",
             }}>
-            
+
             <Grid container>
                 <Grid item xs={12}>
                     <div
@@ -41,7 +90,8 @@ export default function PostView(props: InferGetServerSidePropsType<typeof getSe
 
                         <Button
                             variant="text"
-                            color="secondary">
+                            color="secondary"
+                            href={`/userprofile/view/${postInfo.userOwner.id}`}>
                             <Avatar src={`/avatars/${postInfo.userOwner.avatar}`} />
                             <Typography
                                 sx={{
@@ -58,6 +108,37 @@ export default function PostView(props: InferGetServerSidePropsType<typeof getSe
                 </Grid>
             </Grid>
         </Paper>
+
+        <Stack
+            alignContent={"center"}
+            justifyContent="center"
+            spacing={2}
+            component={"div"}
+            sx={{
+                p: 2,
+                m:2,
+                flexWrap: "wrap"
+            }}>
+            <>
+                {
+                    pagination
+                }
+            </>
+            <>
+                {
+                    commentsElements
+                }
+            </>
+            <>
+                {
+                    pagination
+                }
+            </>
+            <MdEditor
+                onSend={sendComment}
+                placeholder="Оставить комментарий..."
+                rowsCount={2}></MdEditor>
+        </Stack>
     </>
 }
 
@@ -108,9 +189,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                                 login: true,
                                 avatar: true,
                             }
-                        },
-                        comments: false,
-
+                        }
                     }
                 }).then(postInfo => {
                     if (!!postInfo) {

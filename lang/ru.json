@@ -7,11 +7,12 @@
 
 
     "PROFILE.uploadAvatar":"Загрузить аватар",
-    "PROFILE.wallTitle":"Ваша стена",
+    "PROFILE.wallTitle":"Комментарии",
 
     "BURGERNAV.threads":"Тематические обсуждения",
 
     "THREADS.LIST.title":"Разделы",
+    "THREADS.LIST.latest":"Последние",
 
 
     "THREADS.NEW.setTitle":"Заголовок темы",

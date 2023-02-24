@@ -7,9 +7,10 @@ import React, { useState } from "react";
 import { FormatDateToRu } from "../formatters/formatTimeToRu";
 import DisplayMdWrapper from "../editors/EditorsComponents/displayMdWrapper";
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { useRouter } from "next/dist/client/router";
 
 export interface ICommentComponentParams extends ThreadComment {
-    user: { avatar: string, login: string }
+    user: { avatar: string, login: string, id:string }
     liked: boolean,
 }
 
@@ -53,8 +54,10 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
                 spacing={1}
                 direction={"row"}
                 sx={{
-                    minHeight: "40px"
-                }}>
+                    minHeight: "40px",
+                    cursor:"pointer",
+                }}
+                onClick={()=>{document.location.assign(`/userprofile/view/${props.user.id}`)}}>
                 <Avatar
                     src={`/avatars/${props.user.avatar}`}></Avatar>
                 <Typography

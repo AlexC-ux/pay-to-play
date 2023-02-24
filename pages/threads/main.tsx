@@ -19,17 +19,31 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
 
     const [selectedPage, setSelectedPage] = useState(1)
 
-    const [pagination, setPagination] = useState(<div key="pag_01292"></div>);
+    const [pagination, setPagination] = useState(<div></div>);
 
     const [threads, setThreads] = useState<any[]>([]);
 
     const [collectionId, setCollectionId] = useState("latest")
 
-
-    const fetcher: any = (url: string) => fetch(url).then(async (res) => {
-        const data: any = await res.json()
+    console.log({ selectedPage })
+    const getThreadPosts: any = (url: string) => fetch(url).then(async (res) => {
+        const response: any = await res.json();
+        const data = response.threads;
         if (!!data && Array.isArray(data)) {
-            if (data.length > 0) {
+            if (response.threadsTotal > 0) {
+                if (response.threadsTotal > 10) {
+                    setPagination(<><Pagination
+                        page={selectedPage}
+                        onChange={onPageChange}
+                        count={Math.ceil(response.threadsTotal / 10)}
+                        color="secondary"
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-around"
+                        }}></Pagination></>)
+                } else {
+                    setPagination(<div></div>)
+                }
                 setThreads(data.map((thread: Thread & {
                     _count: {
                         comments: number;
@@ -40,17 +54,17 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                     } | null;
                 }) => <div key={thread.id + "_wrp"}>{ThreadComponent(thread)}</div>
                 ))
-            } else {
             }
         }
         return data;
     });
 
-    const { data, error, mutate } = useSWR(`/api/threads/posts/${collectionId}?page=${selectedPage - 1}`, fetcher);
+    useEffect(() => {
+        getThreadPosts(`/api/threads/posts/${collectionId}?page=${selectedPage - 1}`)
+    }, [collectionId, selectedPage])
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
         setSelectedPage(page);
-        mutate();
     }
 
     return <>
@@ -82,8 +96,14 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                                 <Button
                                     color="secondary"
                                     variant="outlined"
-                                    onClick={() => { router.replace("/threads/new") }}>
+                                    onClick={() => { router.replace("/threads/new"); setSelectedPage(1); }}>
                                     <PlaylistAddOutlinedIcon />
+                                </Button>
+                                <Button
+                                    color="secondary"
+                                    variant="outlined"
+                                    onClick={() => { setCollectionId(`latest`); }}>
+                                    {intl.formatMessage({ id: "THREADS.LIST.latest" })}
                                 </Button>
                                 {
                                     props.threadsCollections?.map((collection: any) => {
@@ -91,7 +111,7 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
                                             key={collection.id}
                                             color="secondary"
                                             variant="outlined"
-                                            onClick={() => { setCollectionId(`${collection.id}`); }}>{collection.title}</Button>
+                                            onClick={() => { setCollectionId(`${collection.id}`); setSelectedPage(1); }}>{collection.title}</Button>
                                     })
                                 }
                             </ButtonGroup>
@@ -101,7 +121,7 @@ export default function Threads(props: InferGetServerSidePropsType<typeof getSer
             </Grid>
             <Grid item xs={12} md={8}>
                 <Stack
-                spacing={1}>
+                    spacing={1}>
                     {threads}
                     {pagination}
                 </Stack>
