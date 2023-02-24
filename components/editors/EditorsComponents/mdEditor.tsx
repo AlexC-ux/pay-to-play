@@ -189,9 +189,15 @@ export default function MdEditor(props: MdEditorProps = { rowsCount: 9, placehol
     }
     //link menu
 
-    return <Paper>
-        <Grid container>
-            <Grid item xs={12}>
+    return <Paper
+        elevation={2}
+        sx={{
+            p: 1,
+        }}>
+        <Grid container
+            component={"div"}>
+            <Grid item xs={12}
+                component="div">
                 <Stack
                     direction={"row"}
                     maxWidth="90vw"

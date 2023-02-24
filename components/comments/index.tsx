@@ -10,7 +10,7 @@ import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined
 import { useRouter } from "next/dist/client/router";
 
 export interface ICommentComponentParams extends ThreadComment {
-    user: { avatar: string, login: string, id:string }
+    user: { avatar: string, login: string, id: string }
     liked: boolean,
 }
 
@@ -26,38 +26,29 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
         dispatcher();
     }
 
-
     return <Paper
+        elevation={2}
         key={`${props.id}_${props.likes}`}
         sx={{
             p: 2,
             maxWidth: "100%",
             position: "relative"
         }}>
-        <Stack
-            justifyContent={"end"}
-            direction="row"
-            display={() => {
-                if (userId == threadOwnerID || props.usersId == userId.toString()) {
-                    return "flex"
-                }
-                return "none"
+        <div
+            style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between"
             }}>
-            <IconButton
-                onClick={handleDelete}>
-                <DeleteForeverOutlinedIcon />
-            </IconButton>
-        </Stack>
-        <Stack
-            direction={"column"}>
             <Stack
                 spacing={1}
                 direction={"row"}
                 sx={{
                     minHeight: "40px",
-                    cursor:"pointer",
+                    cursor: "pointer",
+                    display: "inline-flex",
                 }}
-                onClick={()=>{document.location.assign(`/userprofile/view/${props.user.id}`)}}>
+                onClick={() => { document.location.assign(`/userprofile/view/${props.user.id}`) }}>
                 <Avatar
                     src={`/avatars/${props.user.avatar}`}></Avatar>
                 <Typography
@@ -68,9 +59,25 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
                     display={"flex"}
                 >{props.user.login}</Typography>
             </Stack>
-
+            <Stack
+                justifyContent={"end"}
+                direction="row"
+                display={() => {
+                    if ((userId == threadOwnerID) || (props.usersId == userId)) {
+                        return "inline-flex"
+                    }
+                    return "none"
+                }}>
+                <IconButton
+                    onClick={handleDelete}>
+                    <DeleteForeverOutlinedIcon />
+                </IconButton>
+            </Stack>
+        </div>
+        <Stack
+            direction={"column"}>
             <Typography
-                variant="subtitle2"
+                variant="subtitle1"
                 component={"div"}>
                 <DisplayMdWrapper>
                     {props.text}
@@ -84,7 +91,7 @@ export default function CommentsElement(props: ICommentComponentParams, dispatch
                 }}>
 
                 <Typography
-                    variant="body1"
+                    variant="overline"
                     sx={{
                         display: "flex",
                         flexWrap: "wrap",

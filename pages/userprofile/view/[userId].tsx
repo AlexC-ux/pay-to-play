@@ -78,7 +78,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                     setCommentsElements(<>
                         {
                             data?.map((el: any, index: number) => {
-                                return CommentsElement(el, mutate, index, props.user.id, props.user.threads[0].id, props.user.threads[0].usersId)
+                                return CommentsElement(el, mutate, index, props.currentProfile.id, props.user.threads[0].id, props.user.Id)
                             })
                         }
                     </>)
@@ -115,6 +115,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                     justifyContent="center"
                     spacing={5}>
                     <Paper
+                        elevation={0}
                         sx={{
                             p: 2
                         }}>
@@ -135,7 +136,7 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
 
                             </Box>
 
-                            <Typography variant="h4" component={"div"} align="center">{props.user.login}</Typography>
+                            <Typography variant="h6" component={"div"} align="center">{props.user.login}</Typography>
                         </Stack>
                     </Paper>
 
@@ -143,153 +144,162 @@ export default function MyProfilePage(props: InferGetServerSidePropsType<typeof 
                         alignContent={"center"}
                         justifyContent="center"
                         spacing={2}
-                        component={Paper}
-                        sx={{
-                            p: 2
-                        }}>
-                        <Grid container>
-                            <Grid item xs={12} md={4}
-                                sx={{
-                                    justifyContent: "center",
-                                    display: "flex",
-                                }}>
-                                <Stack
-                                    direction={"row"}
-                                    spacing={"space-around"}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignContent: "center",
-                                            flexWrap: "wrap",
-                                        }}>
-
-                                        <FavoriteBorderOutlined />
-                                    </Box>
-                                    <Typography variant="h5" component="div"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                        }}>{props.user.likesSummary}</Typography>
-                                </Stack>
-                            </Grid>
-                            <Grid item xs={12} md={4}
-                                sx={{
-                                    justifyContent: "center",
-                                    display: "flex",
-                                }}>
-                                <Stack
-                                    direction={"row"}
-                                    spacing={"space-around"}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignContent: "center",
-                                            flexWrap: "wrap",
-                                        }}>
-
-                                        <SubjectOutlinedIcon />
-                                    </Box>
-                                    <Typography variant="h5" component="div"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                        }}>{props.user._count.threads}</Typography>
-                                </Stack>
-                            </Grid>
-                            <Grid item xs={12} md={4}
-                                sx={{
-                                    justifyContent: "center",
-                                    display: "flex",
-                                }}>
-                                <Stack
-                                    direction={"row"}
-                                    spacing={"space-around"}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignContent: "center",
-                                            flexWrap: "wrap",
-                                        }}>
-
-                                        <ChatOutlinedIcon />
-                                    </Box>
-                                    <Typography variant="h5" component="div"
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "center",
-                                        }}>{props.user._count.ThreadComment}</Typography>
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                        <Stack
-                            direction={"row"}
+                        component={"div"}>
+                        <Paper
+                            elevation={0}
                             sx={{
-                                justifyContent: "center",
-                                alignContent: "center",
-                                flexWrap: "wrap",
+                                p: 2
                             }}>
-                            <Box
+                            <Grid container>
+                                <Grid item xs={12} md={4}
+                                    sx={{
+                                        justifyContent: "center",
+                                        display: "flex",
+                                    }}>
+                                    <Stack
+                                        direction={"row"}
+                                        spacing={"space-around"}>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignContent: "center",
+                                                flexWrap: "wrap",
+                                            }}>
+
+                                            <FavoriteBorderOutlined />
+                                        </Box>
+                                        <Typography variant="h5" component="div"
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}>{props.user.likesSummary}</Typography>
+                                    </Stack>
+                                </Grid>
+                                <Grid item xs={12} md={4}
+                                    sx={{
+                                        justifyContent: "center",
+                                        display: "flex",
+                                    }}>
+                                    <Stack
+                                        direction={"row"}
+                                        spacing={"space-around"}>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignContent: "center",
+                                                flexWrap: "wrap",
+                                            }}>
+
+                                            <SubjectOutlinedIcon />
+                                        </Box>
+                                        <Typography variant="h5" component="div"
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}>{props.user._count.threads}</Typography>
+                                    </Stack>
+                                </Grid>
+                                <Grid item xs={12} md={4}
+                                    sx={{
+                                        justifyContent: "center",
+                                        display: "flex",
+                                    }}>
+                                    <Stack
+                                        direction={"row"}
+                                        spacing={"space-around"}>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignContent: "center",
+                                                flexWrap: "wrap",
+                                            }}>
+
+                                            <ChatOutlinedIcon />
+                                        </Box>
+                                        <Typography variant="h5" component="div"
+                                            sx={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                            }}>{props.user._count.ThreadComment}</Typography>
+                                    </Stack>
+                                </Grid>
+                            </Grid>
+                            <Stack
+                                direction={"row"}
                                 sx={{
-                                    display: "flex",
                                     justifyContent: "center",
                                     alignContent: "center",
                                     flexWrap: "wrap",
                                 }}>
-                                <TodayOutlinedIcon />
-                            </Box>
-                            <Typography variant="h5" component="div"
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignContent: "center",
-                                    flexWrap: "wrap",
-                                }}>{FormatDateToRu(new Date(Number(props.user.memberSince.toString())))}</Typography>
-                        </Stack>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignContent: "center",
+                                        flexWrap: "wrap",
+                                    }}>
+                                    <TodayOutlinedIcon />
+                                </Box>
+                                <Typography variant="h5" component="div"
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignContent: "center",
+                                        flexWrap: "wrap",
+                                    }}>{FormatDateToRu(new Date(Number(props.user.memberSince.toString())))}</Typography>
+                            </Stack>
+
+                        </Paper>
                     </Stack>
                 </Stack>
             </Grid>
+
             <Grid item xs={12} md={8}
                 sx={{
                     maxWidth: "100%",
                 }}>
-                <Stack
-                    alignContent={"center"}
-                    justifyContent="center"
-                    spacing={2}
-                    component={Paper}
-                    sx={{
-                        p: 2,
-                        flexWrap: "wrap"
-                    }}>
-                    <Typography
-                        variant="h5"
+                <Paper
+                    elevation={0}>
+                    <Stack
+                        alignContent={"center"}
+                        justifyContent="center"
+                        spacing={2}
                         component={"div"}
                         sx={{
-                            width: "100%",
-                        }}>{intl.formatMessage({ id: "PROFILE.wallTitle" })}</Typography>
-                    <>
-                        {
-                            pagination
-                        }
-                    </>
-                    <>
-                        {
-                            commentsElements
-                        }
-                    </>
-                    <>
-                        {
-                            pagination
-                        }
-                    </>
-                    <MdEditor
-                        onSend={sendComment}
-                        placeholder="Оставить комментарий..."
-                        rowsCount={2}></MdEditor>
-                </Stack>
+                            p: 2,
+                            flexWrap: "wrap"
+                        }}>
+
+                        <Typography
+                            variant="h5"
+                            component={"div"}
+                            sx={{
+                                width: "100%",
+                            }}>{intl.formatMessage({ id: "PROFILE.wallTitle" })}</Typography>
+                        <>
+                            {
+                                pagination
+                            }
+                        </>
+                        <>
+                            {
+                                commentsElements
+                            }
+                        </>
+                        <>
+                            {
+                                pagination
+                            }
+                        </>
+                        <MdEditor
+                            onSend={sendComment}
+                            placeholder="Оставить комментарий..."
+                            rowsCount={2}></MdEditor>
+                    </Stack>
+                </Paper>
             </Grid>
         </Grid>
         {uploadAvatarErrorAlert.element}

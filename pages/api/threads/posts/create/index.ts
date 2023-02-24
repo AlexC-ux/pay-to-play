@@ -5,6 +5,11 @@ import { getSession } from "../../../../../app/sessions";
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Error | any>) {
     const { title, collectionId, content } = req.body;
 
+    if (!title||!collectionId||!content) {
+        res.writeHead(301, { Location: '/userprofile/me' })
+        res.end()
+        return;
+    }
     const session = await getSession(req, res);
     const prisma = new PrismaClient();
     async function main() {
